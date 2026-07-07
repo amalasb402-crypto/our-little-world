@@ -554,6 +554,102 @@ cursor:pointer;
 box-shadow:0 8px 20px rgba(255,123,147,.3);
 }
 
+#memoryPopup{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.45);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+opacity:0;
+
+visibility:hidden;
+
+transition:.3s;
+
+z-index:5000;
+
+}
+
+#memoryPopup.show{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+.popupCard{
+
+background:white;
+
+width:85%;
+
+max-width:340px;
+
+padding:25px;
+
+border-radius:25px;
+
+text-align:center;
+
+box-shadow:0 20px 45px rgba(0,0,0,.25);
+
+}
+
+.popupCard h2{
+
+color:#FF7B93;
+
+margin-bottom:18px;
+
+}
+
+.popupCard input{
+
+width:100%;
+
+padding:12px;
+
+margin-bottom:15px;
+
+border-radius:14px;
+
+border:2px solid #ffd5e5;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+}
+
+#saveMemoryBtn{
+
+width:100%;
+
+padding:13px;
+
+border:none;
+
+border-radius:16px;
+
+background:#FF7B93;
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
 </style>
 
 </head>
@@ -661,6 +757,29 @@ I love you endlessly.
 
 </div>
 
+<div id="memoryPopup">
+
+<div class="popupCard">
+
+<h2>✨ New Memory</h2>
+
+<input
+id="memoryCaption"
+type="text"
+placeholder="Caption (Example: Our first movie ❤️)">
+
+<input
+id="memoryDate"
+type="date">
+
+<button id="saveMemoryBtn">
+Save Memory 💗
+</button>
+
+</div>
+
+</div>
+
 <script>
 
 const photos = document.querySelectorAll(".photo");
@@ -677,17 +796,25 @@ const closeNote = document.querySelector(".closeNote");
 let currentPhotoIndex = 0;
 let startX = 0;
 
-photos.forEach((photo, index) => {
+function setupGallery(){
 
-    photo.addEventListener("click", () => {
+const photos=document.querySelectorAll(".photo");
 
-        currentPhotoIndex = index;
-        showPhoto(currentPhotoIndex);
-        viewer.classList.add("show");
+photos.forEach((photo,index)=>{
 
-    });
+photo.onclick=()=>{
+
+currentPhotoIndex=index;
+
+showPhoto(index);
+
+viewer.classList.add("show");
+
+};
 
 });
+
+}
 
 function showPhoto(index){
 
@@ -779,13 +906,32 @@ const uploadBtn=document.getElementById("uploadBtn");
 
 uploadBtn.onclick=()=>upload.click();
 
-upload.onchange=async()=>{
+let selectedFile;
 
-for(const file of upload.files){
+const popup=document.getElementById("memoryPopup");
+const saveBtn=document.getElementById("saveMemoryBtn");
+
+upload.onchange=()=>{
+
+selectedFile=upload.files[0];
+
+if(selectedFile){
+
+popup.classList.add("show");
+
+}
+
+};
+
+saveBtn.onclick=async()=>{
+
+const caption=document.getElementById("memoryCaption").value || "New Memory 💗";
+
+const date=document.getElementById("memoryDate").value || new Date().toLocaleDateString();
 
 const form=new FormData();
 
-form.append("file",file);
+form.append("file",selectedFile);
 form.append("upload_preset",UPLOAD_PRESET);
 
 const response=await fetch(
@@ -798,24 +944,37 @@ body:form
 const result=await response.json();
 
 await window.addDoc(window.galleryRef,{
-    image: result.secure_url,
-    caption: "New Memory 💗",
-    date: new Date().toLocaleDateString()
+
+image:result.secure_url,
+
+caption:caption,
+
+date:date
+
 });
 
-alert("Photo uploaded! 💗");
+popup.classList.remove("show");
 
-}
+document.getElementById("memoryCaption").value="";
+document.getElementById("memoryDate").value="";
+
+alert("Memory Saved 💗");
+
+location.reload();
 
 };
+
 </script>
 
 <script type="module">
+    
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+
 import {
   getFirestore,
   collection,
-  addDoc
+  addDoc,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -830,8 +989,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.galleryRef = collection(db,"gallery");
-window.addDoc = addDoc;
+const galleryRef = collection(db,"gallery");
+
+async function loadGallery(){
+
+const gallery=document.querySelector(".gallery");
+
+gallery.innerHTML="";
+
+const snapshot=await getDocs(galleryRef);
+
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+gallery.innerHTML+=`
+
+<div class="photo">
+
+<img src="${data.image}">
+
+<div class="caption">
+
+<h3>${data.caption}</h3>
+
+<p>${data.date}</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+loadGallery().then(()=>{
+setupGallery();
+});
+
+console.log("Gallery loaded");
+
+window.galleryRef=galleryRef;
+window.addDoc=addDoc;
+
 </script>
 
 </body>
