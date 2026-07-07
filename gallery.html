@@ -1,659 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Our Memories 💗</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
-
 <style>
-
-body{
-margin:0;
-padding:20px;
-font-family:'Quicksand',sans-serif;
-
-background:linear-gradient(
-135deg,
-#E8F4FF,
-#FFF4FA,
-#FCEEFF
-);
-
-min-height:100vh;
-
-overflow-x:hidden;
-position:relative;
-}
-
-.header{
-text-align:center;
-margin-bottom:30px;
-}
-
-.header h1{
-    font-family:'Fredoka One',cursive;
-    font-size:32px;
-    color:#FF7B93;
-    margin:0;
-    text-shadow:0 3px 10px rgba(255,123,147,.18);
-}
-
-.collection-text{
-    margin-top:10px;
-    margin-bottom:12px;
-
-    font-size:14px;
-    font-weight:700;
-
-    color:#9A9A9A;
-
-    letter-spacing:.4px;
-}
-
-.gallery{
-
-display:grid;
-
-grid-template-columns:repeat(2,1fr);
-
-gap:20px;
-
-max-width:420px;
-
-margin:0 auto 40px;
-
-padding:0 5px;
-
-}
-
-.photo{
-
-background:white;
-
-border-radius:28px;
-
-overflow:hidden;
-
-border:3px solid rgba(255,255,255,.8);
-
-box-shadow:
-0 12px 24px rgba(255,123,147,.15),
-0 4px 10px rgba(170,220,255,.15);
-
-backdrop-filter:blur(10px);
-
-transition:.35s ease;
-
-cursor:pointer;
-
-opacity:0;
-transform:translateY(35px);
-animation:fadeUp .8s forwards;
-
-}
-
-.photo:hover{
-
-transform:translateY(-8px);
-
-}
-
-.photo:hover img{
-
-transform:scale(1.06);
-
-}
-
-.photo:active{
-
-transform:scale(.97);
-
-}
-
-.photo img{
-
-width:100%;
-
-height:190px;
-
-object-fit:cover;
-
-display:block;
-
-transition:.45s ease;
-
-}
-
-.caption{
-
-padding:12px;
-
-background:linear-gradient(to top,#FFF8FB,#FFFFFF);
-
-}
-
-.caption h3{
-
-margin:0;
-
-font-size:16px;
-
-color:#FF7B93;
-
-}
-
-.caption p{
-
-margin-top:5px;
-
-font-size:13px;
-
-color:#888;
-
-}
-
-#viewer{
-
-position:fixed;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-background:rgba(25,25,35,.75);
-
-backdrop-filter:blur(10px);
-
-display:flex;
-
-flex-direction:column;
-
-justify-content:center;
-
-align-items:center;
-
-opacity:0;
-
-visibility:hidden;
-
-transition:.35s;
-
-z-index:999;
-
-}
-
-#viewer.show{
-
-opacity:1;
-
-visibility:visible;
-
-}
-
-#viewer.show #viewerImg{
-
-transform:scale(1);
-
-opacity:1;
-
-}
-
-#viewerImg{
-
-width:85%;
-
-max-width:380px;
-
-border-radius:28px;
-
-box-shadow:0 20px 45px rgba(0,0,0,.35);
-
-transform:scale(.8);
-
-opacity:0;
-
-transition:.35s ease;
-
-}
-
-#viewerCaption{
-
-margin-top:18px;
-
-color:white;
-
-font-size:18px;
-
-font-weight:bold;
-
-text-align:center;
-
-}
-
-#closeViewer{
-
-position:absolute;
-
-top:25px;
-
-right:28px;
-
-font-size:34px;
-
-color:white;
-
-cursor:pointer;
-
-}
-
-.bg-blob{
-    position:fixed;
-    border-radius:50%;
-    filter:blur(12px);
-    opacity:.35;
-    z-index:-1;
-    animation:float 10s ease-in-out infinite;
-}
-
-.blob1{
-    width:220px;
-    height:220px;
-    background:#BFE6FF;
-    top:-60px;
-    left:-80px;
-}
-
-.blob2{
-    width:180px;
-    height:180px;
-    background:#FFD5E5;
-    bottom:30px;
-    right:-50px;
-    animation-delay:2s;
-}
-
-.blob3{
-    width:140px;
-    height:140px;
-    background:#E8D8FF;
-    top:45%;
-    left:-50px;
-    animation-delay:4s;
-}
-
-@keyframes float{
-
-0%,100%{
-transform:translateY(0px);
-}
-
-50%{
-transform:translateY(-18px);
-}
-
-}
-
-.photo:nth-child(2){
-    animation-delay:.2s;
-}
-
-.photo:nth-child(3){
-    animation-delay:.4s;
-}
-
-.photo:nth-child(4){
-    animation-delay:.6s;
-}
-
-.photo:nth-child(5){
-    animation-delay:.8s;
-}
-
-@keyframes fadeUp{
-
-from{
-opacity:0;
-transform:translateY(35px);
-}
-
-to{
-opacity:1;
-transform:translateY(0);
-}
-
-}
-
-.memory-quote{
-    text-align:center;
-    font-family:'Caveat',cursive;
-    font-size:18px;
-    color:#B88AA4;
-    font-style:italic;
-    opacity:.92;
-    margin-top:0;
-    margin-bottom:30px;
-}
-
-#floatingHeart{
-
-position:absolute;
-
-bottom:70px;
-
-left:50%;
-transform:translateX(-50%) translateY(20px);
-
-font-size:32px;
-
-opacity:0;
-
-transform:translateY(20px);
-
-transition:.4s ease;
-
-}
-
-#viewer.show #floatingHeart{
-opacity:1;
-transform:translateX(-50%) translateY(0);
-
-animation:heartbeat 1.4s infinite;
-
-}
-
-@keyframes heartbeat{
-
-0%,100%{
-transform:scale(1);
-}
-
-25%{
-transform:scale(1.15);
-}
-
-50%{
-transform:scale(.95);
-}
-
-75%{
-transform:scale(1.12);
-}
-
-}
-
-#loveNote{
-
-position:fixed;
-inset:0;
-
-background:rgba(0,0,0,.55);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-opacity:0;
-visibility:hidden;
-
-transition:.35s;
-
-z-index:1000;
-
-}
-
-#loveNote.show{
-
-opacity:1;
-visibility:visible;
-
-}
-
-.note-card{
-
-width:82%;
-max-width:340px;
-
-background:#FFFDFE;
-
-padding:28px;
-
-border-radius:28px;
-
-box-shadow:0 20px 45px rgba(0,0,0,.25);
-
-text-align:center;
-
-position:relative;
-
-animation:fadeUp .4s;
-
-}
-
-.note-card h2{
-
-font-size:34px;
-margin:0 0 10px;
-
-}
-
-.note-card p{
-
-font-family:'Caveat',cursive;
-
-font-size:24px;
-
-line-height:1.5;
-
-color:#8A6D7E;
-
-}
-
-.signature{
-
-margin-top:18px;
-
-font-family:'Caveat',cursive;
-
-font-size:28px;
-
-color:#FF7B93;
-
-}
-
-.closeNote{
-
-position:absolute;
-
-top:15px;
-
-right:18px;
-
-font-size:28px;
-
-cursor:pointer;
-
-color:#888;
-
-}
-
-#loveNote{
-    display:flex;
-    position:fixed;
-    inset:0;
-    background:rgba(30,30,40,.55);
-    backdrop-filter:blur(8px);
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-
-    opacity:0;
-    visibility:hidden;
-    transition:.35s;
-}
-
-#loveNote.show{
-    opacity:1;
-    visibility:visible;
-}
-
-.note-card{
-    width:85%;
-    max-width:360px;
-    background:linear-gradient(135deg,#FFFDFE,#FFF3F8,#EEF7FF);
-    padding:28px;
-    border-radius:28px;
-    text-align:center;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
-    position:relative;
-}
-
-.note-card h2{
-    font-size:42px;
-    margin:0 0 12px;
-}
-
-.note-card p{
-    color:#666;
-    line-height:1.8;
-    font-size:15px;
-}
-
-.signature{
-    margin-top:18px;
-    font-family:'Caveat',cursive;
-    font-size:28px;
-    color:#FF7B93;
-}
-
-.closeNote{
-    position:absolute;
-    top:14px;
-    right:18px;
-    font-size:28px;
-    cursor:pointer;
-}
-
-#uploadBtn{
-display:block;
-margin:20px auto;
-padding:12px 22px;
-border:none;
-border-radius:18px;
-background:#FF7B93;
-color:white;
-font-size:16px;
-cursor:pointer;
-box-shadow:0 8px 20px rgba(255,123,147,.3);
-}
-
-#memoryPopup{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.45);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-opacity:0;
-
-visibility:hidden;
-
-transition:.3s;
-
-z-index:5000;
-
-}
-
-#memoryPopup.show{
-
-opacity:1;
-
-visibility:visible;
-
-}
-
-.popupCard{
-
-background:white;
-
-width:85%;
-
-max-width:340px;
-
-padding:25px;
-
-border-radius:25px;
-
-text-align:center;
-
-box-shadow:0 20px 45px rgba(0,0,0,.25);
-
-}
-
-.popupCard h2{
-
-color:#FF7B93;
-
-margin-bottom:18px;
-
-}
-
-.popupCard input{
-
-width:100%;
-
-padding:12px;
-
-margin-bottom:15px;
-
-border-radius:14px;
-
-border:2px solid #ffd5e5;
-
-font-size:15px;
-
-box-sizing:border-box;
-
-}
-
-#saveMemoryBtn{
-
-width:100%;
-
-padding:13px;
-
-border:none;
-
-border-radius:16px;
-
-background:#FF7B93;
-
-color:white;
-
-font-size:16px;
-
-cursor:pointer;
-
-}
-
+body { margin:0; padding:20px; font-family:'Quicksand',sans-serif; background:linear-gradient(135deg, #E8F4FF, #FFF4FA, #FCEEFF); min-height:100vh; overflow-x:hidden; position:relative; }
+.header { text-align:center; margin-bottom:30px; }
+.header h1 { font-family:'Fredoka One',cursive; font-size:32px; color:#FF7B93; margin:0; text-shadow:0 3px 10px rgba(255,123,147,.18); }
+.collection-text { margin-top:10px; margin-bottom:12px; font-size:14px; font-weight:700; color:#9A9A9A; letter-spacing:.4px; }
+.gallery { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; max-width:420px; margin:0 auto 40px; padding:0 5px; }
+.photo { background:white; border-radius:28px; overflow:hidden; border:3px solid rgba(255,255,255,.8); box-shadow: 0 12px 24px rgba(255,123,147,.15), 0 4px 10px rgba(170,220,255,.15); backdrop-filter:blur(10px); transition:.35s ease; cursor:pointer; opacity:0; transform:translateY(35px); animation:fadeUp .8s forwards; }
+.photo:hover { transform:translateY(-8px); }
+.photo:hover img { transform:scale(1.06); }
+.photo:active { transform:scale(.97); }
+.photo img { width:100%; height:190px; object-fit:cover; display:block; transition:.45s ease; }
+.caption { padding:12px; background:linear-gradient(to top,#FFF8FB,#FFFFFF); }
+.caption h3 { margin:0; font-size:16px; color:#FF7B93; }
+.caption p { margin-top:5px; font-size:13px; color:#888; }
+#viewer { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(25,25,35,.75); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; visibility:hidden; transition:.35s; z-index:999; }
+#viewer.show { opacity:1; visibility:visible; }
+#viewer.show #viewerImg { transform:scale(1); opacity:1; }
+#viewerImg { width:85%; max-width:380px; border-radius:28px; box-shadow:0 20px 45px rgba(0,0,0,.35); transform:scale(.8); opacity:0; transition:.35s ease; }
+#viewerCaption { margin-top:18px; color:white; font-size:18px; font-weight:bold; text-align:center; }
+#closeViewer { position:absolute; top:25px; right:28px; font-size:34px; color:white; cursor:pointer; }
+.bg-blob { position:fixed; border-radius:50%; filter:blur(12px); opacity:.35; z-index:-1; animation:float 10s ease-in-out infinite; }
+.blob1 { width:220px; height:220px; background:#BFE6FF; top:-60px; left:-80px; }
+.blob2 { width:180px; height:180px; background:#FFD5E5; bottom:30px; right:-50px; animation-delay:2s; }
+.blob3 { width:140px; height:140px; background:#E8D8FF; top:45%; left:-50px; animation-delay:4s; }
+@keyframes float { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-18px); } }
+.photo:nth-child(2) { animation-delay:.2s; } .photo:nth-child(3) { animation-delay:.4s; } .photo:nth-child(4) { animation-delay:.6s; } .photo:nth-child(5) { animation-delay:.8s; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(35px); } to { opacity:1; transform:translateY(0); } }
+.memory-quote { text-align:center; font-family:'Caveat',cursive; font-size:18px; color:#B88AA4; font-style:italic; opacity:.92; margin-top:0; margin-bottom:30px; }
+#floatingHeart { position:absolute; bottom:70px; left:50%; transform:translateX(-50%) translateY(20px); font-size:32px; opacity:0; transition:.4s ease; }
+#viewer.show #floatingHeart { opacity:1; transform:translateX(-50%) translateY(0); animation:heartbeat 1.4s infinite; }
+@keyframes heartbeat { 0%,100% { transform:scale(1); } 25% { transform:scale(1.15); } 50% { transform:scale(.95); } 75% { transform:scale(1.12); } }
+#loveNote { display:flex; position:fixed; inset:0; background:rgba(30,30,40,.55); backdrop-filter:blur(8px); justify-content:center; align-items:center; z-index:1000; opacity:0; visibility:hidden; transition:.35s; }
+#loveNote.show { opacity:1; visibility:visible; }
+.note-card { width:85%; max-width:360px; background:linear-gradient(135deg,#FFFDFE,#FFF3F8,#EEF7FF); padding:28px; border-radius:28px; text-align:center; box-shadow:0 15px 35px rgba(0,0,0,.2); position:relative; animation:fadeUp .4s; }
+.note-card h2 { font-size:42px; margin:0 0 12px; }
+.note-card p { color:#666; line-height:1.8; font-size:15px; font-family:'Caveat',cursive; }
+.signature { margin-top:18px; font-family:'Caveat',cursive; font-size:28px; color:#FF7B93; }
+.closeNote { position:absolute; top:14px; right:18px; font-size:28px; cursor:pointer; color:#888; }
+#uploadBtn { display:block; margin:20px auto; padding:12px 22px; border:none; border-radius:18px; background:#FF7B93; color:white; font-size:16px; cursor:pointer; box-shadow:0 8px 20px rgba(255,123,147,.3); }
+#memoryPopup { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; justify-content:center; align-items:center; opacity:0; visibility:hidden; transition:.3s; z-index:5000; }
+#memoryPopup.show { opacity:1; visibility:visible; }
+.popupCard { background:white; width:85%; max-width:340px; padding:25px; border-radius:25px; text-align:center; box-shadow:0 20px 45px rgba(0,0,0,.25); }
+.popupCard h2 { color:#FF7B93; margin-bottom:18px; }
+.popupCard input { width:100%; padding:12px; margin-bottom:15px; border-radius:14px; border:2px solid #ffd5e5; font-size:15px; box-sizing:border-box; }
+#saveMemoryBtn { width:100%; padding:13px; border:none; border-radius:16px; background:#FF7B93; color:white; font-size:16px; cursor:pointer; }
 </style>
-
 </head>
-
 <body>
 
 <div class="bg-blob blob1"></div>
@@ -661,134 +60,60 @@ cursor:pointer;
 <div class="bg-blob blob3"></div>
 
 <div class="header">
-
-<h1>Our Memories 💗</h1>
-
-<p class="collection-text">
-    A collection of tiny forever moments.
-</p>
-
-<div class="memory-quote">
-    "Every picture is another page of our story."
+    <h1>Our Memories 💗</h1>
+    <p class="collection-text">A collection of tiny forever moments.</p>
+    <div class="memory-quote">"Every picture is another page of our story."</div>
 </div>
 
+<input type="file" id="upload" accept="image/*" multiple style="display: none;">
+
+<button id="uploadBtn">📸 Add Memories</button>
+
+<div id="memoryPopup">
+    <div class="popupCard">
+        <h2>✨ New Memory</h2>
+        <input id="memoryCaption" type="text" placeholder="Caption (Example: Our first movie ❤️)">
+        <input id="memoryDate" type="date">
+        <button id="saveMemoryBtn">Save Memory 💗</button>
+    </div>
 </div>
 
-<input type="file" id="upload" accept="image/*" multiple hidden>
-
-<button id="uploadBtn">
-📸 Add Memories
-</button>
-
-<div class="gallery">
-
-<div class="photo">
-
-<img src="photo1.jpg">
-
-<div class="caption">
-
-<h3>First Smile 🌸</h3>
-
-<p>April 2026</p>
-
-</div>
-
-</div>
-
-<div class="photo">
-
-<img src="photo2.jpg">
-
-<div class="caption">
-
-<h3>My Favourite 💗</h3>
-
-<p>May 2026</p>
-
-</div>
-
-</div>
-
-</div>
+<div class="gallery"></div>
 
 <div id="viewer">
-
     <span id="closeViewer">✕</span>
-
     <img id="viewerImg">
-
     <div id="viewerCaption"></div>
-
-<div id="floatingHeart">🫀</div>
-
+    <div id="floatingHeart">🫀</div>
 </div>
 
 <div id="loveNote">
-
-<div class="note-card">
-
-<span class="closeNote">✕</span>
-
-<h2>🫀</h2>
-
-<p>
-No matter how many memories we make,
-you'll always be the best part of every single one.<br><br>
-
-Thank you for choosing me, for loving me,
-and for making even the most ordinary days feel extraordinary.<br><br>
-
-Every moment with you becomes my favorite
-simply because you're in it.<br><br>
-
-I hope one day we'll look back at these memories together,
-smiling at how our little story became a lifetime of beautiful moments.<br><br>
-
-I love you endlessly.
-💕🫂
-</p>
-
-<div class="signature">
-— Ammu 🤍
-</div>
-
-</div>
-
-</div>
-
-<div id="memoryPopup">
-
-<div class="popupCard">
-
-<h2>✨ New Memory</h2>
-
-<input
-id="memoryCaption"
-type="text"
-placeholder="Caption (Example: Our first movie ❤️)">
-
-<input
-id="memoryDate"
-type="date">
-
-<button id="saveMemoryBtn">
-Save Memory 💗
-</button>
-
-</div>
-
+    <div class="note-card">
+        <span class="closeNote">✕</span>
+        <h2>🫀</h2>
+        <p>
+        No matter how many memories we make,<br>
+        you'll always be the best part of every single one.<br><br>
+        Thank you for choosing me, for loving me,<br>
+        and for making even the most ordinary days feel extraordinary.<br><br>
+        Every moment with you becomes my favorite<br>
+        simply because you're in it.<br><br>
+        I hope one day we'll look back at these memories together,<br>
+        smiling at how our little story became a lifetime of beautiful moments.<br><br>
+        I love you endlessly.<br>
+        💕🫂
+        </p>
+        <div class="signature">— Ammu 🤍</div>
+    </div>
 </div>
 
 <script>
-
-const photos = document.querySelectorAll(".photo");
+let photos; 
 
 const viewer = document.getElementById("viewer");
 const viewerImg = document.getElementById("viewerImg");
 const viewerCaption = document.getElementById("viewerCaption");
 const closeViewer = document.getElementById("closeViewer");
-
 const floatingHeart = document.getElementById("floatingHeart");
 const loveNote = document.getElementById("loveNote");
 const closeNote = document.querySelector(".closeNote");
@@ -797,179 +122,110 @@ let currentPhotoIndex = 0;
 let startX = 0;
 
 function setupGallery(){
-
-const photos=document.querySelectorAll(".photo");
-
-photos.forEach((photo,index)=>{
-
-photo.onclick=()=>{
-
-currentPhotoIndex=index;
-
-showPhoto(index);
-
-viewer.classList.add("show");
-
-};
-
-});
-
+    photos = document.querySelectorAll(".photo");
+    photos.forEach((photo,index)=>{
+        photo.onclick=()=>{
+            currentPhotoIndex=index;
+            showPhoto(index);
+            viewer.classList.add("show");
+        };
+    });
 }
 
 function showPhoto(index){
-
-    if(index < 0) index = photos.length - 1;
-    if(index >= photos.length) index = 0;
-
-    currentPhotoIndex = index;
-
-    const photo = photos[currentPhotoIndex];
-
-    viewerImg.src = photo.querySelector("img").src;
-
-    viewerCaption.innerHTML =
-        photo.querySelector("h3").innerHTML +
-        "<br>" +
-        photo.querySelector("p").innerHTML;
-
-}
-
-function nextPhoto(){
-    showPhoto(currentPhotoIndex + 1);
-}
-
-function previousPhoto(){
-    showPhoto(currentPhotoIndex - 1);
-}
-
-closeViewer.addEventListener("click", () => {
-    viewer.classList.remove("show");
-});
-
-viewer.addEventListener("click", (e) => {
-
-    if(e.target === viewer){
-        viewer.classList.remove("show");
+    if(photos && photos.length > 0) {
+        if(index < 0) index = photos.length - 1;
+        if(index >= photos.length) index = 0;
+        currentPhotoIndex = index;
+        const photo = photos[currentPhotoIndex];
+        
+        viewerImg.src = photo.querySelector("img").src;
+        viewerCaption.innerHTML = photo.querySelector("h3").innerHTML + "<br>" + photo.querySelector("p").innerHTML;
     }
+}
 
-});
+function nextPhoto(){ showPhoto(currentPhotoIndex + 1); }
+function previousPhoto(){ showPhoto(currentPhotoIndex - 1); }
 
-viewer.addEventListener("touchstart",(e)=>{
-    startX=e.touches[0].clientX;
-});
-
+closeViewer.addEventListener("click", () => { viewer.classList.remove("show"); });
+viewer.addEventListener("click", (e) => { if(e.target === viewer){ viewer.classList.remove("show"); } });
+viewer.addEventListener("touchstart",(e)=>{ startX=e.touches[0].clientX; });
 viewer.addEventListener("touchend",(e)=>{
-
     const endX=e.changedTouches[0].clientX;
-
-    if(endX-startX>60){
-        previousPhoto();
-    }
-    else if(startX-endX>60){
-        nextPhoto();
-    }
-
+    if(endX-startX>60){ previousPhoto(); }
+    else if(startX-endX>60){ nextPhoto(); }
 });
 
-/* Heart opens the love letter */
-
-floatingHeart.addEventListener("click", () => {
-
-    loveNote.classList.add("show");
-
-});
-
-/* Close letter */
-
-closeNote.addEventListener("click", () => {
-
-    loveNote.classList.remove("show");
-
-});
-
-loveNote.addEventListener("click",(e)=>{
-
-    if(e.target===loveNote){
-        loveNote.classList.remove("show");
-    }
-
-});
-
+floatingHeart.addEventListener("click", () => { loveNote.classList.add("show"); });
+closeNote.addEventListener("click", () => { loveNote.classList.remove("show"); });
+loveNote.addEventListener("click",(e)=>{ if(e.target===loveNote){ loveNote.classList.remove("show"); } });
 </script>
 
 <script>
 const CLOUD_NAME="o8cgtjyz";
 const UPLOAD_PRESET="our-little-world";
 
-const upload=document.getElementById("upload");
-const uploadBtn=document.getElementById("uploadBtn");
-
-uploadBtn.onclick=()=>upload.click();
+const upload = document.getElementById("upload");
+const uploadBtn = document.getElementById("uploadBtn");
+const popup = document.getElementById("memoryPopup");
+const saveBtn = document.getElementById("saveMemoryBtn");
 
 let selectedFile;
 
-const popup=document.getElementById("memoryPopup");
-const saveBtn=document.getElementById("saveMemoryBtn");
-
-upload.onchange=()=>{
-
-selectedFile=upload.files[0];
-
-if(selectedFile){
-
-popup.classList.add("show");
-
-}
-
+// The ultimate fix: clears the input so the phone always detects a new photo
+uploadBtn.onclick = () => {
+    upload.value = ''; 
+    upload.click();
 };
+
+upload.addEventListener('change', (event) => {
+    selectedFile = event.target.files[0];
+    if (selectedFile) {
+        popup.classList.add("show");
+    }
+});
 
 saveBtn.onclick=async()=>{
+    const caption=document.getElementById("memoryCaption").value || "New Memory 💗";
+    const date=document.getElementById("memoryDate").value || new Date().toLocaleDateString();
 
-const caption=document.getElementById("memoryCaption").value || "New Memory 💗";
+    saveBtn.innerText = "Saving... ⏳";
+    saveBtn.disabled = true;
 
-const date=document.getElementById("memoryDate").value || new Date().toLocaleDateString();
+    try {
+        const form=new FormData();
+        form.append("file",selectedFile);
+        form.append("upload_preset",UPLOAD_PRESET);
 
-const form=new FormData();
+        const response=await fetch(
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+            { method:"POST", body:form }
+        );
 
-form.append("file",selectedFile);
-form.append("upload_preset",UPLOAD_PRESET);
+        const result=await response.json();
 
-const response=await fetch(
-`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-{
-method:"POST",
-body:form
-});
+        await window.addDoc(window.galleryRef,{
+            image:result.secure_url,
+            caption:caption,
+            date:date
+        });
 
-const result=await response.json();
-
-await window.addDoc(window.galleryRef,{
-
-image:result.secure_url,
-
-caption:caption,
-
-date:date
-
-});
-
-popup.classList.remove("show");
-
-document.getElementById("memoryCaption").value="";
-document.getElementById("memoryDate").value="";
-
-alert("Memory Saved 💗");
-
-location.reload();
-
+        popup.classList.remove("show");
+        document.getElementById("memoryCaption").value="";
+        document.getElementById("memoryDate").value="";
+        
+        alert("Memory Saved 💗");
+        location.reload();
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+        saveBtn.innerText = "Save Memory 💗";
+        saveBtn.disabled = false;
+    }
 };
-
 </script>
 
 <script type="module">
-    
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-
 import {
   getFirestore,
   collection,
@@ -988,52 +244,33 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const galleryRef = collection(db,"gallery");
 
 async function loadGallery(){
+    const gallery=document.querySelector(".gallery");
+    gallery.innerHTML="";
 
-const gallery=document.querySelector(".gallery");
-
-gallery.innerHTML="";
-
-const snapshot=await getDocs(galleryRef);
-
-snapshot.forEach(doc=>{
-
-const data=doc.data();
-
-gallery.innerHTML+=`
-
-<div class="photo">
-
-<img src="${data.image}">
-
-<div class="caption">
-
-<h3>${data.caption}</h3>
-
-<p>${data.date}</p>
-
-</div>
-
-</div>
-
-`;
-
-});
-
+    const snapshot=await getDocs(galleryRef);
+    snapshot.forEach(doc=>{
+        const data=doc.data();
+        gallery.innerHTML+=`
+        <div class="photo">
+            <img src="${data.image}">
+            <div class="caption">
+                <h3>${data.caption}</h3>
+                <p>${data.date}</p>
+            </div>
+        </div>
+        `;
+    });
 }
 
 loadGallery().then(()=>{
-setupGallery();
+    setupGallery();
 });
-
-console.log("Gallery loaded");
 
 window.galleryRef=galleryRef;
 window.addDoc=addDoc;
-
 </script>
 
 </body>
