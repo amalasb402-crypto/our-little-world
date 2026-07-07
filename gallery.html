@@ -12,7 +12,14 @@ body { margin:0; padding:20px; font-family:'Quicksand',sans-serif; background:li
 .header h1 { font-family:'Fredoka One',cursive; font-size:32px; color:#FF7B93; margin:0; text-shadow:0 3px 10px rgba(255,123,147,.18); }
 .collection-text { margin-top:10px; margin-bottom:12px; font-size:14px; font-weight:700; color:#9A9A9A; letter-spacing:.4px; }
 .gallery { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; max-width:420px; margin:0 auto 40px; padding:0 5px; }
-.photo { background:white; border-radius:28px; overflow:hidden; border:3px solid rgba(255,255,255,.8); box-shadow: 0 12px 24px rgba(255,123,147,.15), 0 4px 10px rgba(170,220,255,.15); backdrop-filter:blur(10px); transition:.35s ease; cursor:pointer; opacity:0; transform:translateY(35px); animation:fadeUp .8s forwards; }
+
+/* Main Action Buttons Layout */
+.action-buttons { display: flex; justify-content: center; gap: 12px; margin: 20px auto; }
+#uploadBtn { padding:12px 22px; border:none; border-radius:18px; background:#FF7B93; color:white; font-size:16px; cursor:pointer; box-shadow:0 8px 20px rgba(255,123,147,.3); }
+#toggleDeleteBtn { padding:12px 18px; border:none; border-radius:18px; background:#ff4d4d; color:white; font-size:16px; cursor:pointer; box-shadow:0 8px 20px rgba(255,77,77,.3); transition:0.3s; }
+
+/* Photo Card Styles */
+.photo { background:white; border-radius:28px; overflow:hidden; border:3px solid rgba(255,255,255,.8); box-shadow: 0 12px 24px rgba(255,123,147,.15), 0 4px 10px rgba(170,220,255,.15); backdrop-filter:blur(10px); transition:.35s ease; cursor:pointer; opacity:0; transform:translateY(35px); animation:fadeUp .8s forwards; position: relative; }
 .photo:hover { transform:translateY(-8px); }
 .photo:hover img { transform:scale(1.06); }
 .photo:active { transform:scale(.97); }
@@ -20,13 +27,32 @@ body { margin:0; padding:20px; font-family:'Quicksand',sans-serif; background:li
 .caption { padding:12px; background:linear-gradient(to top,#FFF8FB,#FFFFFF); }
 .caption h3 { margin:0; font-size:16px; color:#FF7B93; }
 .caption p { margin-top:5px; font-size:13px; color:#888; }
+
+/* Delete Mode Checkbox Ring */
+.select-ring { position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; border-radius: 50%; border: 3px solid white; background: rgba(0,0,0,0.3); z-index: 10; opacity: 0; visibility: hidden; transition: 0.2s; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+body.delete-mode .select-ring { opacity: 1; visibility: visible; }
+body.delete-mode .photo { cursor: cell; }
+body.delete-mode .photo:hover { transform: translateY(-4px); }
+body.delete-mode .photo:hover img { transform: scale(1.02); }
+.photo.selected .select-ring { background: #FF7B93; border-color: #FF7B93; }
+.photo.selected .select-ring::after { content: "✓"; }
+.photo.selected img { opacity: 0.6; }
+
+/* Floating Delete Action Bar */
+#deleteBottomBar { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); width: 88%; max-width: 380px; background: white; padding: 16px 22px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); display: flex; justify-content: space-between; align-items: center; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-sizing: border-box; }
+#deleteBottomBar.show { bottom: 30px; }
+.delete-actions button { padding: 10px 16px; border: none; border-radius: 14px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s; }
+#cancelDeleteBtn { background: #f0f0f0; color: #555; margin-right: 8px; }
+#confirmDeleteBtn { background: #ff4d4d; color: white; opacity: 0.5; }
+#selectedCount { font-weight: bold; color: #666; font-size: 15px; }
+
 #viewer { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(25,25,35,.75); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; visibility:hidden; transition:.35s; z-index:999; }
 #viewer.show { opacity:1; visibility:visible; }
 #viewer.show #viewerImg { transform:scale(1); opacity:1; }
 #viewerImg { width:85%; max-width:380px; border-radius:28px; box-shadow:0 20px 45px rgba(0,0,0,.35); transform:scale(.8); opacity:0; transition:.35s ease; }
 #viewerCaption { margin-top:18px; color:white; font-size:18px; font-weight:bold; text-align:center; }
 #closeViewer { position:absolute; top:25px; right:28px; font-size:34px; color:white; cursor:pointer; }
-#deletePhotoBtn { position:absolute; top:30px; left:28px; font-size:14px; color:#ff4d4d; background:white; padding:6px 14px; border-radius:12px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,.2); }
+
 .bg-blob { position:fixed; border-radius:50%; filter:blur(12px); opacity:.35; z-index:-1; animation:float 10s ease-in-out infinite; }
 .blob1 { width:220px; height:220px; background:#BFE6FF; top:-60px; left:-80px; }
 .blob2 { width:180px; height:180px; background:#FFD5E5; bottom:30px; right:-50px; animation-delay:2s; }
@@ -45,7 +71,6 @@ body { margin:0; padding:20px; font-family:'Quicksand',sans-serif; background:li
 .note-card p { color:#666; line-height:1.8; font-size:15px; font-family:'Caveat',cursive; }
 .signature { margin-top:18px; font-family:'Caveat',cursive; font-size:28px; color:#FF7B93; }
 .closeNote { position:absolute; top:14px; right:18px; font-size:28px; cursor:pointer; color:#888; }
-#uploadBtn { display:block; margin:20px auto; padding:12px 22px; border:none; border-radius:18px; background:#FF7B93; color:white; font-size:16px; cursor:pointer; box-shadow:0 8px 20px rgba(255,123,147,.3); }
 #memoryPopup { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; justify-content:center; align-items:center; opacity:0; visibility:hidden; transition:.3s; z-index:5000; }
 #memoryPopup.show { opacity:1; visibility:visible; }
 .popupCard { background:white; width:85%; max-width:340px; padding:25px; border-radius:25px; text-align:center; box-shadow:0 20px 45px rgba(0,0,0,.25); }
@@ -68,7 +93,10 @@ body { margin:0; padding:20px; font-family:'Quicksand',sans-serif; background:li
 
 <input type="file" id="upload" accept="image/*" multiple style="display: none;">
 
-<button id="uploadBtn">📸 Add Memories</button>
+<div class="action-buttons">
+    <button id="uploadBtn">📸 Add Memories</button>
+    <button id="toggleDeleteBtn">🗑️ Delete</button>
+</div>
 
 <div id="memoryPopup">
     <div class="popupCard">
@@ -83,10 +111,17 @@ body { margin:0; padding:20px; font-family:'Quicksand',sans-serif; background:li
 
 <div id="viewer">
     <span id="closeViewer">✕</span>
-    <span id="deletePhotoBtn">🗑️ Delete</span>
     <img id="viewerImg">
     <div id="viewerCaption"></div>
     <div id="floatingHeart">🫀</div>
+</div>
+
+<div id="deleteBottomBar">
+    <span id="selectedCount">0 Selected</span>
+    <div class="delete-actions">
+        <button id="cancelDeleteBtn">Cancel</button>
+        <button id="confirmDeleteBtn" disabled>Delete</button>
+    </div>
 </div>
 
 <div id="loveNote">
@@ -116,21 +151,84 @@ const viewer = document.getElementById("viewer");
 const viewerImg = document.getElementById("viewerImg");
 const viewerCaption = document.getElementById("viewerCaption");
 const closeViewer = document.getElementById("closeViewer");
-const deletePhotoBtn = document.getElementById("deletePhotoBtn");
 const floatingHeart = document.getElementById("floatingHeart");
 const loveNote = document.getElementById("loveNote");
 const closeNote = document.querySelector(".closeNote");
 
+// Variables for Delete Mode
+let isDeleteMode = false;
+let selectedForDeletion = new Set();
+const toggleDeleteBtn = document.getElementById("toggleDeleteBtn");
+const deleteBottomBar = document.getElementById("deleteBottomBar");
+const selectedCountText = document.getElementById("selectedCount");
+const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
 let currentPhotoIndex = 0;
 let startX = 0;
+
+function updateDeleteBar() {
+    selectedCountText.innerText = `${selectedForDeletion.size} Selected`;
+    if (selectedForDeletion.size > 0) {
+        confirmDeleteBtn.style.opacity = "1";
+        confirmDeleteBtn.disabled = false;
+    } else {
+        confirmDeleteBtn.style.opacity = "0.5";
+        confirmDeleteBtn.disabled = true;
+    }
+}
+
+function toggleDeleteMode(forceOff = false) {
+    if (isDeleteMode || forceOff) {
+        isDeleteMode = false;
+        document.body.classList.remove("delete-mode");
+        deleteBottomBar.classList.remove("show");
+        selectedForDeletion.clear();
+        document.querySelectorAll(".photo").forEach(p => p.classList.remove("selected"));
+    } else {
+        isDeleteMode = true;
+        document.body.classList.add("delete-mode");
+        deleteBottomBar.classList.add("show");
+        updateDeleteBar();
+    }
+}
+
+toggleDeleteBtn.onclick = () => toggleDeleteMode();
+cancelDeleteBtn.onclick = () => toggleDeleteMode(true);
+
+confirmDeleteBtn.onclick = async () => {
+    if (selectedForDeletion.size === 0) return;
+    if (confirm(`Are you sure you want to permanently delete ${selectedForDeletion.size} memories? 🥺`)) {
+        confirmDeleteBtn.innerText = "Deleting... ⏳";
+        confirmDeleteBtn.disabled = true;
+        
+        for (let id of selectedForDeletion) {
+            if(window.deletePhotoFromDB) await window.deletePhotoFromDB(id);
+        }
+        location.reload();
+    }
+};
 
 function setupGallery(){
     photos = document.querySelectorAll(".photo");
     photos.forEach((photo,index)=>{
-        photo.onclick=()=>{
-            currentPhotoIndex=index;
-            showPhoto(index);
-            viewer.classList.add("show");
+        photo.onclick = () => {
+            // If we are deleting, select the photo instead of viewing it!
+            if (isDeleteMode) {
+                const id = photo.getAttribute("data-id");
+                if (selectedForDeletion.has(id)) {
+                    selectedForDeletion.delete(id);
+                    photo.classList.remove("selected");
+                } else {
+                    selectedForDeletion.add(id);
+                    photo.classList.add("selected");
+                }
+                updateDeleteBar();
+            } else {
+                currentPhotoIndex=index;
+                showPhoto(index);
+                viewer.classList.add("show");
+            }
         };
     });
 }
@@ -144,9 +242,6 @@ function showPhoto(index){
         
         viewerImg.src = photo.querySelector("img").src;
         viewerCaption.innerHTML = photo.querySelector("h3").innerHTML + "<br>" + photo.querySelector("p").innerHTML;
-        
-        // Save the database ID to the viewer so the delete button knows which one to remove
-        viewer.setAttribute("data-current-id", photo.getAttribute("data-id"));
     }
 }
 
@@ -165,18 +260,6 @@ viewer.addEventListener("touchend",(e)=>{
 floatingHeart.addEventListener("click", () => { loveNote.classList.add("show"); });
 closeNote.addEventListener("click", () => { loveNote.classList.remove("show"); });
 loveNote.addEventListener("click",(e)=>{ if(e.target===loveNote){ loveNote.classList.remove("show"); } });
-
-// Hook up the Delete Button
-deletePhotoBtn.addEventListener("click", async () => {
-    const photoId = viewer.getAttribute("data-current-id");
-    if(photoId && window.deletePhotoFromDB) {
-        if(confirm("Are you sure you want to delete this memory? 🥺")) {
-            deletePhotoBtn.innerText = "Deleting... ⏳";
-            await window.deletePhotoFromDB(photoId);
-            location.reload();
-        }
-    }
-});
 </script>
 
 <script>
@@ -191,6 +274,9 @@ const saveBtn = document.getElementById("saveMemoryBtn");
 let selectedFile;
 
 uploadBtn.onclick = () => {
+    // If you click "Add" while in delete mode, automatically turn it off
+    if (isDeleteMode) toggleDeleteMode(true); 
+    
     upload.value = ''; 
     upload.click();
 };
@@ -250,5 +336,54 @@ import {
   getDocs,
   deleteDoc,
   doc
-} from "
-    
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD9lzo0sUii8-luG5UXl-UN9JM-cdMScQQ",
+  authDomain: "ourapp-bc0e3.firebaseapp.com",
+  projectId: "ourapp-bc0e3",
+  storageBucket: "ourapp-bc0e3.firebasestorage.app",
+  messagingSenderId: "204306533947",
+  appId: "1:204306533947:web:7a69612745d0db6512161e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const galleryRef = collection(db,"gallery");
+
+async function loadGallery(){
+    const gallery=document.querySelector(".gallery");
+    gallery.innerHTML="";
+
+    const snapshot=await getDocs(galleryRef);
+    snapshot.forEach(docSnap=>{
+        const data=docSnap.data();
+        const docId = docSnap.id; 
+        
+        // Added the select ring to check off photos in delete mode!
+        gallery.innerHTML+=`
+        <div class="photo" data-id="${docId}">
+            <div class="select-ring"></div>
+            <img src="${data.image}">
+            <div class="caption">
+                <h3>${data.caption}</h3>
+                <p>${data.date}</p>
+            </div>
+        </div>
+        `;
+    });
+}
+
+loadGallery().then(()=>{
+    setupGallery();
+});
+
+window.galleryRef=galleryRef;
+window.addDoc=addDoc;
+window.deletePhotoFromDB = async (id) => {
+    await deleteDoc(doc(db, "gallery", id));
+};
+</script>
+
+</body>
+</html>
