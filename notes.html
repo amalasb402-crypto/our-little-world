@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Little Keep 📝</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #FFF5F5; /* Warm soft pink tint */
+            --text-color: #4A3E3D;
+            --primary-accent: #FF7B93; /* Soft strawberry pink */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--primary-accent);
+            font-size: 28px;
+            margin: 0 0 5px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Note Input Box Structure */
+        .note-creator {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 8px 24px rgba(255, 123, 147, 0.12);
+            border: 2px solid #FFE3E7;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+        }
+
+        .note-creator input, .note-creator textarea {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-color);
+            background: transparent;
+            box-sizing: border-box;
+        }
+
+        .note-creator input {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .note-creator textarea {
+            font-size: 14px;
+            resize: none;
+            height: 80px;
+        }
+
+        /* Toolkit under the text area */
+        .creator-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #FFE3E7;
+        }
+
+        /* Pastel Color Picker dots */
+        .color-pickers {
+            display: flex;
+            gap: 8px;
+        }
+
+        .color-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-dot.active {
+            border-color: #4A3E3D;
+            transform: scale(1.1);
+        }
+
+        /* The Add Button */
+        .add-btn {
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+            font-family: 'Fredoka One', cursive;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(255, 123, 147, 0.3);
+        }
+
+        .add-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* The Grid Displaying Sticky Notes */
+        .notes-grid {
+            width: 100%;
+            max-width: 500px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two items side-by-side on mobile */
+            gap: 15px;
+        }
+
+        /* Individual Sticky Note Design */
+        .sticky-note {
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+            animation: popIn 0.3s ease-out forwards;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .sticky-note h3 {
+            margin: 0 0 8px 0;
+            font-size: 15px;
+            font-weight: 700;
+            word-wrap: break-word;
+        }
+
+        .sticky-note p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+            flex-grow: 1;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        /* Date stamp at the bottom of note */
+        .note-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        /* Little cutesy delete cross button */
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #4A3E3D;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+            padding: 0;
+        }
+
+        .delete-btn:hover {
+            opacity: 1;
+            color: #FF4B6E;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Our Shared Space 📝</h1>
+        <p>Leave sweet notes, grocery lists, or random thoughts ✨</p>
+    </div>
+
+    <div class="note-creator">
+        <input type="text" id="noteTitle" placeholder="Title..." autocomplete="off">
+        <textarea id="noteContent" placeholder="Write something cute or important..."></textarea>
+        
+        <div class="creator-tools">
+            <div class="color-pickers" id="colorPickers">
+                <div class="color-dot active" style="background-color: #FFD3DA;" data-color="#FFD3DA"></div>
+                <div class="color-dot" style="background-color: #FFF0B3;" data-color="#FFF0B3"></div>
+                <div class="color-dot" style="background-color: #D6F5D6;" data-color="#D6F5D6"></div>
+                <div class="color-dot" style="background-color: #D3E6FF;" data-color="#D3E6FF"></div>
+                <div class="color-dot" style="background-color: #E8D7FF;" data-color="#E8D7FF"></div>
+            </div>
+            <button class="add-btn" onclick="createNewNote()">Pin It 💞</button>
+        </div>
+    </div>
+
+    <div class="notes-grid" id="notesGrid"></div>
+
+    <script>
+        // Track the current color choice
+        let selectedColor = "#FFD3DA";
+
+        // Setup clicking logic for color choosing dots
+        const dots = document.querySelectorAll('.color-dot');
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                document.querySelector('.color-dot.active').classList.remove('active');
+                e.target.classList.add('active');
+                selectedColor = e.target.getAttribute('data-color');
+            });
+        });
+
+        // Load any existing notes from browser storage right when page opens
+        window.onload = function() {
+            displayNotes();
+        };
+
+        async function createNewNote() {
+    const titleInput = document.getElementById('noteTitle');
+    const contentInput = document.getElementById('noteContent');
+
+    if (titleInput.value.trim() === "" && contentInput.value.trim() === "") {
+        alert("Can't pin an empty note! Write a little something 🌸");
+        return;
+    }
+
+    window.saveFirebaseNote({
+        title: titleInput.value.trim(),
+        content: contentInput.value.trim(),
+        color: selectedColor,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    });
+
+    titleInput.value = "";
+    contentInput.value = "";
+}
+
+        function displayNotes() {
+            const grid = document.getElementById('notesGrid');
+            grid.innerHTML = ""; // empty current board to rebuild cleanly
+
+            let notes = JSON.parse(localStorage.getItem('coupleNotes')) || [];
+
+            notes.forEach(note => {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'sticky-note';
+                noteElement.style.backgroundColor = note.color;
+
+                noteElement.innerHTML = `
+                    <div>
+                        ${note.title ? `<h3>${escapeHtml(note.title)}</h3>` : ''}
+                        <p>${escapeHtml(note.content)}</p>
+                    </div>
+                    <div class="note-footer">
+                        <span>${note.date}</span>
+                        <button class="delete-btn" onclick="deleteNote(${note.id})">✕</button>
+                    </div>
+                `;
+                grid.appendChild(noteElement);
+            });
+        }
+
+        function deleteNote(id) {
+            let notes = JSON.parse(localStorage.getItem('coupleNotes')) || [];
+            notes = notes.filter(note => note.id !== id);
+            localStorage.setItem('coupleNotes', JSON.stringify(notes));
+            displayNotes();
+        }
+
+        // Helper security code to ensure custom emojis/text types show safely
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+    
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD9lzo0sUii8-luG5UXl-UN9JM-cdMScQQ",
+  authDomain: "ourapp-bc0e3.firebaseapp.com",
+  projectId: "ourapp-bc0e3",
+  storageBucket: "ourapp-bc0e3.firebasestorage.app",
+  messagingSenderId: "204306533947",
+  appId: "1:204306533947:web:7a69612745d0db6512161e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const notesRef = collection(db, "notes");
+
+window.saveFirebaseNote = async function(note) {
+    await addDoc(notesRef, note);
+};
+
+onSnapshot(notesRef, (snapshot) => {
+    const grid = document.getElementById("notesGrid");
+    grid.innerHTML = "";
+
+    snapshot.forEach((item) => {
+        const note = item.data();
+
+        const noteElement = document.createElement('div');
+        noteElement.className = 'sticky-note';
+        noteElement.style.backgroundColor = note.color;
+
+        noteElement.innerHTML = `
+        <div>
+            ${note.title ? `<h3>${escapeHtml(note.title)}</h3>` : ''}
+            <p>${escapeHtml(note.content)}</p>
+        </div>
+        <div class="note-footer">
+            <span>${note.date}</span>
+        </div>
+        `;
+
+        grid.appendChild(noteElement);
+    });
+});
+
+</script>
+
+</body>
+</html>

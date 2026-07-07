@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Calendar</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#dbeeff,#f5faff);
+    color:#2b3a55;
+}
+
+h1{
+    text-align:center;
+    padding:20px;
+    color:#3b5b8a;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:10px;
+}
+
+.year{
+    margin-top:30px;
+    background:#ffffffb3;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.year-title{
+    font-size:22px;
+    font-weight:bold;
+    color:#3b5b8a;
+    margin-bottom:10px;
+}
+
+.event{
+    background:#eaf3ff;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+    border-left:5px solid #7fb3ff;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:20px auto;
+    max-width:800px;
+    padding:15px;
+    background:#ffffffb3;
+    border-radius:15px;
+}
+
+input, button{
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    font-size:14px;
+}
+
+input{
+    background:#f0f6ff;
+}
+
+button{
+    background:#7fb3ff;
+    color:white;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(0.98);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌿 Memory Calendar</h1>
+
+<form id="eventForm">
+    <input type="text" id="year" placeholder="Year (e.g. 2007)" required>
+    <input type="text" id="date" placeholder="Date (e.g. July 23)" required>
+    <input type="text" id="note" placeholder="Note (e.g. Kadhu bday)" required>
+    <button type="submit">Add Memory</button>
+</form>
+
+<div class="container" id="calendar"></div>
+
+<script>
+let data = {};
+
+function render(){
+    const cal = document.getElementById("calendar");
+    cal.innerHTML = "";
+
+    Object.keys(data).sort().forEach(year=>{
+        let yearDiv = document.createElement("div");
+        yearDiv.className = "year";
+
+        let title = document.createElement("div");
+        title.className = "year-title";
+        title.innerText = year;
+
+        yearDiv.appendChild(title);
+
+        data[year].forEach(ev=>{
+            let div = document.createElement("div");
+            div.className = "event";
+            div.innerText = `${ev.date} - ${ev.note}`;
+            yearDiv.appendChild(div);
+        });
+
+        cal.appendChild(yearDiv);
+    });
+
+}
+
+document.getElementById("eventForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    let year = document.getElementById("year").value;
+    let date = document.getElementById("date").value;
+    let note = document.getElementById("note").value;
+
+    await window.saveMemory(year,date,note);
+    
+    document.getElementById("year").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("note").value = "";
+
+    render();
+});
+
+render();
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD9lzo0sUii8-luG5UXl-UN9JM-cdMScQQ",
+  authDomain: "ourapp-bc0e3.firebaseapp.com",
+  projectId: "ourapp-bc0e3",
+  storageBucket: "ourapp-bc0e3.firebasestorage.app",
+  messagingSenderId: "204306533947",
+  appId: "1:204306533947:web:7a69612745d0db6512161e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const eventsRef = collection(db,"calendar");
+
+window.saveMemory = async (year,date,note)=>{
+    await addDoc(eventsRef,{
+        year,
+        date,
+        note
+    });
+};
+
+onSnapshot(eventsRef,(snapshot)=>{
+
+    data={};
+
+    snapshot.forEach(doc=>{
+        const e=doc.data();
+
+        if(!data[e.year]) data[e.year]=[];
+
+        data[e.year].push({
+            date:e.date,
+            note:e.note
+        });
+    });
+
+    render();
+
+});
+</script>
+
+</body>
+</html>

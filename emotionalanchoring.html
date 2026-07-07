@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotion Vault for Karthi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Dancing+Script:wght@700&family=Fredoka+One&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #7ec8ff, #ff9ad5);
+}
+
+/* HEADER STYLE */
+.header-container {
+    text-align: center;
+    padding: 30px 20px 10px 20px;
+}
+
+h1 {
+    font-family: 'Fredoka One', cursive;
+    margin: 0;
+    font-size: 2.2rem;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.subtitle {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* CONTAINER (List of letters) */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px 25px 40px 25px;
+    max-width: 500px;
+    margin: auto;
+}
+
+/* CARDS / BUTTONS */
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 14px 18px;
+    border-radius: 15px;
+    cursor: pointer;
+    
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    color: #4a4a4a;
+    font-size: 0.95rem; /* Smaller size for long emotion titles */
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: left;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.card:active {
+    transform: scale(0.97);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.card-emoji {
+    font-size: 1.4rem;
+    margin-right: 12px;
+    flex-shrink: 0; /* Keeps envelope icon from squishing */
+}
+
+/* POPUP MODAL SCREEN */
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    z-index: 10;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* PINTEREST STATIONARY / SCRAPBOOK WRAPPER */
+#modalContent {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    max-height: 80vh;
+    overflow-y: auto; /* Allows long letters to scroll inside the cute paper template */
+    padding: 50px 25px 35px 25px;
+    border-radius: 12px;
+    text-align: left;
+    box-sizing: border-box;
+    
+    /* Aesthetic Cream Scrapbook Paper Background */
+    background: #fffdf6; 
+    color: #333333;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* Decorative Translucent Washi Tape Strip at the top */
+.washi-tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 120px;
+    height: 32px;
+    background: rgba(255, 154, 213, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    z-index: 5;
+}
+
+/* Floating Pinterest Stickers using Emojis */
+.sticker {
+    position: absolute;
+    user-select: none;
+    opacity: 0.85;
+    z-index: 4;
+    pointer-events: none;
+}
+.kiss-1 { bottom: 25px; right: 20px; font-size: 2.8rem; transform: rotate(-15deg); }
+.kiss-2 { top: 75px; right: 15px; font-size: 2rem; transform: rotate(20deg); opacity: 0.65; }
+.butterfly { top: 60px; left: 15px; font-size: 1.8rem; transform: rotate(-25deg); }
+.sparkles { top: 20px; right: 25px; font-size: 1.4rem; }
+.heart { bottom: 80px; left: 20px; font-size: 1.6rem; transform: rotate(12deg); }
+
+/* Title on Paper */
+#modalContent h2 {
+    font-family: 'Quicksand', sans-serif;
+    color: #ff6eb4;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #ffb6e0;
+    padding-bottom: 12px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Handwriting Layout for Original Text (Preserves Line Breaks) */
+#text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    line-height: 1.45;
+    color: #2b2b2b;
+    margin-bottom: 25px;
+    white-space: pre-wrap; /* Crucial! It honors all your spacing and line-breaks */
+}
+
+/* Close Letter Button Styles */
+#close {
+    display: block;
+    margin: 25px auto 0 auto;
+    padding: 10px 24px;
+    border: 2px solid #ff9ad5;
+    border-radius: 25px;
+    background: #fffdf6;
+    color: #ff6eb4;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    position: relative;
+    z-index: 6; /* Places button on top of stickers */
+}
+
+#close:active {
+    background: #ff9ad5;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header-container">
+    <h1>OPEN WHEN...</h1>
+    <div class="subtitle">Letters for Karthi 💕</div>
+</div>
+
+<div class="container">
+
+    <div class="card" onclick="openLetter(1)">
+        <span class="card-emoji">💌</span>
+        When u miss me..read this
+    </div>
+
+    <div class="card" onclick="openLetter(2)">
+        <span class="card-emoji">💌</span>
+        When u feel like u are not enough..read this...
+    </div>
+
+    <div class="card" onclick="openLetter(3)">
+        <span class="card-emoji">💌</span>
+        When u feel angry..read this..
+    </div>
+
+    <div class="card" onclick="openLetter(4)">
+        <span class="card-emoji">💌</span>
+        When u feel happy..read this
+    </div>
+
+    <div class="card" onclick="openLetter(5)">
+        <span class="card-emoji">💌</span>
+        When u feel lonely..read this
+    </div>
+
+    <div class="card" onclick="openLetter(6)">
+        <span class="card-emoji">💌</span>
+        When u feel like u want peace and want to be left alone..read this
+    </div>
+
+    <div class="card" onclick="openLetter(7)">
+        <span class="card-emoji">💌</span>
+        When u feel like u want to be in my arms wrapped in a tight hug..read this
+    </div>
+
+    <div class="card" onclick="openLetter(8)">
+        <span class="card-emoji">💌</span>
+        When u feel like u can't sleep and u want to..read this
+    </div>
+
+    <div class="card" onclick="openLetter(9)">
+        <span class="card-emoji">💌</span>
+        When u feel like i don't understand u..read this
+    </div>
+
+    <div class="card" onclick="openLetter(10)">
+        <span class="card-emoji">💌</span>
+        When u feel like no one's on ur side..read this
+    </div>
+
+</div>
+
+<div id="modal">
+    <div id="modalContent">
+        <div class="washi-tape"></div>
+        <div class="sticker butterfly">🦋</div>
+        <div class="sticker sparkles">✨</div>
+        <div class="sticker heart">💖</div>
+        <div class="sticker kiss-1">💋</div>
+        <div class="sticker kiss-2">💋</div>
+        
+        <h2 id="title"></h2>
+        <p id="text"></p>
+        
+        <button id="close" onclick="closeModal()">Close Letter</button>
+    </div>
+</div>
+
+<script>
+// Array containing all 10 raw texts exactly as provided
+const letters = {
+    1: {
+        title: "When u miss me..read this",
+        text: `My dearest Kadhu..\n\nIf you are reading this..ig today's one of those days where u would usually say in ur language a little quieter that usual..maybe I'm a bit far away from u, or maybe closeby but still we can't meet or talk kind of situation, or maybe due to some reason I may not be able to call u..or maybe this is one of those nights where u stay awake and misses me.. whatever it is..u miss me that's the point. I miss u too ponna everyday every minute every second that I spend without u besides me without your lips touching mine..even when u are with me I miss u whenever there is a slight distance btw us without touching...I miss u..soo it's pretty common to miss ur loved one. I wish I could be there with u like teleport cheyth varana reethil whenever u think of me .. actually I think that would be chaotic..given that u think of me everytym even during not so me coming places or situations..what if like u are taking a poop and think of me and suddenly I'm there sitting on ur lap while u take a poop...ohmyygodddd nasttyy..anyway Njan entha paranjond irunne oh ya..even though I can't do that, just know that just like u ;I would give my everything to be with u. I'm alwaysss with u. I'm always here rooting for u in places that u think no ones on ur side. I'm always ur ammu. Even if u miss me now..soon u are gonna meet me don't be saddddd kathuuu it's not like I'm gonna go thatttttt far from u . my kutti heart can't bear that much but even if one day I did then alsooo I'm flyinggg backk to u every minute i could spare..but if it's too much to handle like u miss me really reallyy reallyyyyyyyy then do whatever ur instincts say..call me..then call me..mathil chadi varan anel mathil chadi vaa..maybe i would scold u a little but in the end of the day I too need u just the way u need me...nowww odi poyi Snd me a text saying "baby i really miss u I need u" no matter where I'm, no matter what situation I'm, i will try my besttt to call u.. don't ever think u are gonna bother me by saying that. Ente pottane Enikk arinjoode. Even if I say I'm busy doing smth.. I'm never too busy for u baby.. soo shooo poyi Enikk msg iddddd...`
+    },
+    2: {
+        title: "When u feel like u are not enough..read this...",
+        text: `My dearest Kadhu..\n\nWhy do u feel like u are not enough..is it smth that I said which made u feel this way or is it due some kind thought that rushed into that pretty -usually so smart but ippo athra alla- brain...kadhutta..u my baby is the mosttt precious thing in this entireeee world..do u know I love u soo soo sooo much. If it's smth i told u that's bothering u..firstly I'm sorry ponna i didn't mean it that way i don't ever want to make u feel like this ever whatever it is that I said was never meant to attack u like that.....but if it made u feel this way then I'm really sorry ponna. I never want my words to become the reason u question ur worth. Kathu u are that one thing I would sacrifice my everything for..u are enough ok. Ik allelum ninakk usually dbts ondavarond whether u are enough for me..whether u deserve the love angane kind of stupid thoughts whether u are indeed the green flag which I say u are..do u think I'm stupid if I ever felt like u were not enough i wouldn't have invested my tym and efforts and love for u.. but i did r8 so what does that mean ...I really love u. And all I want is for u to know ur worth. U are my karthi. u deserve everything and anything the world has to offer.\n\nEven if it's something else that's bothering u...come talk to me..call me and tell me what's bothering u..u trust ur ammu r8. U venting out ur emotions to me will not be bothering but ur silence when u are lost in thoughts that sabotage ur worth in ur own eyes is what will infact bother me.. atleast for me talk to me I will for sure try my best to make u see what I see .U don't have to organize ur thoughts before calling me. U don't have to figure everything out first. U don't have to come with solutions. Just come as u are. Cry if u want to. Be angry if u want to. Sit in silence if u want to. Tell me "baby onnum mindanda..." and I'll stay. Tell me "baby let me talk..." and I'll listen. Tell me "baby enikk onnum ariyilla..." and we'll figure it out together. That's literally the fking point . U don't have to fight ur battles alone when u have me. It's always U and Me..even when we fight even we are sad even when it feels like not talking to eachother it's always been and will be 'u and me' ...never ever against each other\n\nAnd do u know what i see when I look at u..if u could see it U would realize how adorable u are when u smile, how cute u look when u talk about ur games the techy stuffs all those things that u love, how safe u make me feel, how patient u are with me even when I'm being a complete menace, how u somehow manage to make me feel like the most loved girl in the world. If only u could see urself through my eyes...I don't think u would ever question ur worth again.\n\nYou are my brave boy. You try again and again. You made it ur mission to make me feel soo loved that u keep on inventing new ways to love. The efforts u put makes u a diamond ponna..the most precious Lil diamond of mine. I see someone who tries. Even when u don't realize it. I see someone who carries more than he tells people. I see someone who pretends "it's okay" even when it isn't. I see someone who loves quietly instead of loudly. I see someone who has the softest heart but hides it behind "it's fine." I see someone who deserves to be loved so gently that he never has to question it again..and i know u better than everyone in this freaking world..so ente ponn call me and talk to me..tell me " onnum parayaruth let me talk" i would listen to u ..afterall u are my everything. I love u da.. and whatever it is that made u feel this way is stupid coz u are ENOUGH.\n\nSooo...before u close this letter I need u to do one thing for me. Promise me u won't let one bad day decide ur worth. Promise me u won't believe every negative thought that enters that cute little brain of yours.\n\nAnd if after reading this u still somehow feel like u are not enough...then I have only one solution..Call me.💋`
+    },
+    3: {
+        title: "When u feel angry..read this..",
+        text: `My dearest Kadhu..\n\nIf u opened this...I'm guessing someone's been testing the patience that even I know u barely have sometimes. Or maybe it's me. If it's me...hmm first of all...hi angry baby. 😭💋 Before u continue being all grumpy...read this till the end ok? Promise? Good.\n\nFirstly...whatever happened...don't let this one moment convince u that everything is ruined. I know when u get angry u either become really quiet or u just wanna be left alone for a while. And that's okay. I'm not gonna force u to magically become okay in two minutes. But I also don't want u saying things u don't actually mean just because ur emotions are louder than ur heart right now.\n\nCome here...sit down for a minute. Unclench that jaw. Relax those shoulders. Drink some water...yes I'm serious. I know you're probably rolling ur eyes saying "ammu thudangi..." but do it anyway. 😒\n\nIf you're angry because of something outside...remember this...one bad moment doesn't define ur whole day. And one bad day definitely doesn't define u. You've gotten through so many things before. This too will pass.\n\nIf you're angry because of me...please don't keep it inside. Tell me. Even if u think it'll hurt me. I'd rather hear an uncomfortable truth than watch u quietly suffer because u were scared of upsetting me. Relationships aren't about pretending everything's okay. They're about saying "this hurt me" and then figuring it out together. It's never u versus me. It's always us versus the problem.\n\nAnd if u need ten minutes...take ten. If u need an hour...take an hour. Just don't disappear without letting me know ur okay. My overthinking brain will probably imagine u fighting dragons, getting kidnapped or forgetting I exist. 😭\n\nOne more thing...I love u even when you're angry. I love the smiling version of u, the sleepy version of u, the annoying version of u, the stubborn version of u and yes...even the grumpy little burrito version of u. Nothing about one argument or one bad mood changes that.\n\nSo...when u finish reading this...come back to me. Maybe still angry...maybe still annoyed...but come back. Because I'd rather solve things with u than spend a single day pretending u don't matter.\n\nI love u da...now go drink that water...and if it's me who made u angry...then come tell me exactly why. I'll listen. 💋`
+    },
+    4: {
+        title: "When u feel happy..read this",
+        text: `My dearest Kadhu..\n\nSooo...if u opened this one...that means my baby is happyyyyy. Aaaa look at uuuu.😭💋 First of all...come here. Mwuahhhh. I don't even know what's making u smile rn but whatever it is...thank u. Thank u for letting life be kind to u today. U deserve days like this more often than u think.\n\nDo u even realize how cute u become when u're genuinely happy? Like...u smile differently. Ur eyes become all shiny. U talk more. Sometimes u start explaining random techy stuffs or games with sooo much excitement even though I barely understand half the things u say😭...but I still listen because I love hearing u talk about the things u love. I swear it's the cutest thing ever.\n\nPlease don't rush this feeling. Don't think "ith ipo kazhiyum..." Maybe it will...maybe it won't. But today it's here. So live in it. Laugh louder. Eat something u like. Play ur games. Listen to ur favourite songs. Go outside if u feel like it. Or just sit there smiling like an idiot. Idc.😭 Just don't spend today worrying about tomorrow.\n\nAnddd...don't forget to tell me why u're happyyy. I want every tiny detail. Don't give me one dry text saying "I'm happy." Excuse me?? I need the full story. I need screenshots if there are screenshots. I need voice notes. I need dramatic reenactments. I need all the tea.😭\n\nSeeing u happy genuinely makes my whole day better. It's like...my heart somehow smiles too. I don't know how that works scientifically but I'm sure if scientists studied me they'd discover "Ammu's happiness depends 87% on Kadhu being happy."😭\n\nPromise me one thing...whenever life gives u moments like this...keep them. Take pictures. Remember them. Because on difficult days...these little happy memories become proof that better days always come back.\n\nNow go...continue smiling. And before u leave...send ur ammu one picture of that handsome smile. That's an official order.💋`
+    },
+   5: {
+        title: "When u feel lonely..read this",
+        text: `My dearest Kadhu..\n\nCome here ponna...\n\nIf u're reading this...I'm guessing the room feels a little too quiet today. Maybe everyone's busy. Maybe nothing actually happened but somehow u still feel alone. Those days are weird...alle? Surrounded by people sometimes...yet the heart still feels empty.\n\nFirst of all...I need u to remember something.\n\nBeing alone...and being unloved...are two completely different things.\n\nJust because nobody is beside u right now doesn't mean nobody loves u.\n\nBecause I do.\n\nA lot.\n\nMore than these words can explain.\n\nIf I could...I'd literally appear beside u with snacks, steal half ur blanket, annoy u for absolutely no reason and then refuse to leave until u smiled. Actually I'd probably talk too much...u'd tell me "ammu mathi..." and five minutes later secretly enjoy that I never stopped talking.😭\n\nSometimes loneliness lies. It tells us nobody understands us...that nobody cares...that we're forgotten. But it's lying. Because somewhere...probably while u're reading this...I'm thinking about u too. Maybe I'm studying. Maybe I'm sleeping. Maybe I'm eating. But somewhere in my day...u're there. U always are.\n\nRemember all the silly memories we have? The random conversations. The teasing. The kisses. The fights we solved. The calls that lasted way longer than they should have. Those didn't disappear. They're still ours.\n\nAnd u know what? One day...this distance...these lonely evenings...all of this will become memories we'll laugh about. We'll probably say..."remember when we had to read letters because we couldn't hug each other?"😭\n\nUntil then...don't isolate urself too much. Open the window. Take a small walk. Listen to our songs. Or...the best option...\n\nCall me.\n\nEven if u don't feel like talking.\n\nJust hearing ur breathing on the other side is enough sometimes.\n\nBecause u never have to carry loneliness all by urself when u have me.\n\nI love u soo soo sooo much da.\n\nNow imagine I'm sitting beside u...holding ur hand...playing with ur fingers...and resting my head on ur shoulder.\n\nThere...\n\nNow u're not alone anymore.💋`
+    },
+    6: {
+        title: "When u feel like u want peace and want to be left alone..read this",
+        text: `My dearest Kadhu..\n\nHmm...\n\nIf u opened this one...I'm guessing the world feels a little too loud today.\n\nToo many thoughts.\n\nToo many people.\n\nToo many expectations.\n\nToo much...everything.\n\nAnd u just want silence.\n\nFirstly...that's okay.\n\nU don't have to be available for everyone every single second. U don't have to reply immediately. U don't have to pretend u're okay just because people expect u to be.\n\nTake ur time.\n\nBreathe.\n\nSit somewhere quiet.\n\nLet ur brain slow down a little.\n\nBut promise me one tiny thing...\n\nDon't mistake wanting peace...for wanting to push everyone away forever.\n\nThose are two different things.\n\nIf u need space...take space.\n\nIf u need silence...take silence.\n\nIf u need to disappear for a little while...that's okay too.\n\nJust...don't disappear from me without one tiny message.\n\nEven if it's just...\n\n"baby...enikk kurach peace venam..."\n\nThat's enough.\n\nI'll understand.\n\nI won't get angry.\n\nI won't force conversations.\n\nI'll wait.\n\nBecause loving someone also means respecting the moments when they need quiet.\n\nAnd while u're taking care of ur mind...please take care of ur body too. Drink some water. Eat something. Stretch a little. Get some fresh air. I know...I sound like somebody's amma.😭 But who else is gonna remind u?\n\nAnd whenever the silence starts feeling heavy instead of peaceful...\n\nCome back.\n\nNot because I want to invade ur peace...\n\nBut because I want to become part of it.\n\nI don't want to be another noise in ur life.\n\nI want to be that place where ur heart finally rests.\n\nSo go recharge my baby.\n\nI'll still be here.\n\nExactly where u left me.\n\nWaiting to hear about ur day...\n\nWhenever u're ready.\n\nI love u da. Always. 💋`
+    },
+    7: {
+        title: "When u feel like u want to be in my arms wrapped in a tight hug..read this",
+        text: `My dearest Kadhu..\n\nCome here...\n\nNo...closerrr.\n\nA little more.\n\nThere.\n\nNow imagine I'm standing right in front of u. Before u even say anything...I just open my arms for u. No questions. No "what happened?" No "why are u sad?" Just...come here.\n\nI know u sometimes crave a hug more than words. Sometimes there are things that can't be fixed by advice. Sometimes the heart just wants someone to hold it together for a little while. If only teleportation existed...I swear I'd be there in a heartbeat. I'd literally run to u...probably trip halfway because of my own excitement😭...but I'd still make it.\n\nAnd when I finally reach u...I'd wrap my arms around u as tightly as I possibly can. The kind of hug where u forget about everything else for a minute. The kind where u finally exhale because u don't have to stay strong anymore.\n\nI'd probably play with ur hair...kiss ur forehead...then ur cheeks...then obviously steal one from those lips because...well...I'm me.😭💋\n\nDo u know what my favourite place in this whole world is?\n\nNot some fancy country.\n\nNot a beach.\n\nNot a mountain.\n\nIt's wherever u are...especially when I'm in ur arms.\n\nThat's home.\n\nSo if u're reading this because u miss my hugs...close ur eyes for a second.\n\nImagine my head resting on ur chest.\n\nImagine me holding ur hoodie because I don't wanna let go.\n\nImagine me saying...\n\n"I'm here ponna..."\n\n"I'm not going anywhere..."\n\n"Take all the time u need..."\n\nI'd stay there until ur breathing became slower.\n\nUntil ur shoulders relaxed.\n\nUntil that heavy feeling inside ur chest became just a little lighter.\n\nAnd if u cried...\n\nI'd let u.\n\nIf u stayed silent...\n\nI'd stay silent too.\n\nBecause sometimes love isn't talking.\n\nSometimes love is simply refusing to let go.\n\nOne day...u won't have to imagine this anymore.\n\nOne day whenever life gets too much...u'll just come home to me...wrap ur arms around me...and we'll stay like that for as long as we want.\n\nUntil then...\n\nTake this letter as the hug I couldn't physically give u today.\n\nNow...squeeeeezeeeeee🫂\n\nDid u feel that?\n\nGood.\n\nMwuahhh...I love u da.💋`
+    },
+    8: {
+        title: "When u feel like u can't sleep and u want to..read this",
+        text: `My dearest Kadhu..\n\nStill awake?\n\nHmm...\n\nLook at u...reading letters at this hour instead of sleeping.😭\n\nWhat happened baby?\n\nIs ur brain refusing to shut up again?\n\nToo many thoughts?\n\nToo many worries?\n\nOr are u just missing me a little extra tonight?\n\nWhatever the reason is...it's okay.\n\nI'm here now.\n\nFirstly...\n\nStop looking at the time every two minutes.\n\nIt only makes sleeping harder.\n\nSecondly...\n\nPut the phone brightness down a little.\n\nYess...I'm watching u.😭\n\nNow lie down properly.\n\nNo weird sleeping positions.\n\nPull the blanket over u.\n\nGood boy.\n\nNow imagine I'm lying beside u.\n\nI'd probably steal half the blanket even though I don't need that much.\n\nThen I'd slowly move closer until u complain that I have absolutely no concept of personal space.\n\nWhich...is true.\n\nBecause my personal space is literally u.😭\n\nI'd hold ur hand.\n\nPlay with ur fingers.\n\nDraw random hearts on ur palm.\n\nRun my fingers through ur hair until ur eyes slowly start closing.\n\nI'd whisper...\n\n"Shhh...mathi ini..."\n\n"Tomorrow can wait..."\n\n"Tonight...just rest..."\n\nU don't have to solve every problem before sleeping.\n\nThe world won't end because u decided to rest.\n\nUr body deserves sleep.\n\nUr heart deserves peace.\n\nUr mind deserves a break.\n\nAnd if there's something bothering u...\n\nLeave it for tomorrow.\n\nWe'll deal with it together after u wake up.\n\nNot at 2 a.m.\n\nBecause trust me...our brains become professional overthinkers after midnight.😭\n\nBefore u sleep...\n\nI want u to remember one thing.\n\nU are loved.\n\nVery loved.\n\nMore than u probably realize.\n\nAnd somewhere...before I sleep too...I'm probably wishing u a good night in my heart.\n\nSo...\n\nClose those eyes.\n\nTake one deep breath.\n\nAnother one.\n\nGood.\n\nNow imagine I kissed ur forehead...\n\nThen ur nose...\n\nThen ur lips...\n\nAnd finally whispered...\n\n"Good night ente ponna..."\n\n"Sweet dreams..."\n\n"I'll see u tomorrow..."\n\nI love u.\n\nNow sleep.\n\nThat's an order.💋`
+    },
+    9: {
+        title: "When u feel like i don't understand u..read this",
+        text: `My dearest Kadhu..\n\nHmm...\n\nThis one hurts a little.\n\nBecause if u opened this...maybe somewhere inside u're feeling like...\n\n"Ammu doesn't get me."\n\nFirstly...\n\nI'm sorry if I made u feel that way.\n\nNot because I think I'm always wrong...\n\nBut because I never want u to feel alone even when u're talking to me.\n\nI know I'm not u.\n\nI'll never know exactly how ur heart feels in every situation.\n\nI'll never know every thought that crosses ur mind.\n\nBut do u know what I can do?\n\nI can listen.\n\nI can try.\n\nAgain...\n\nAnd again...\n\nAnd again.\n\nUntil I understand.\n\nPlease don't decide what I'll understand before giving me the chance to hear u.\n\nDon't hide things because u think I'll judge u.\n\nDon't smile and say "it's okay" when it isn't.\n\nTell me.\n\nEven if it comes out messy.\n\nEven if u don't know how to explain it.\n\nWe'll figure out the words together.\n\nI might misunderstand sometimes.\n\nU might misunderstand me too.\n\nThat's normal.\n\nWe're two different humans loving each other.\n\nNot mind readers.😭\n\nSo whenever u think...\n\n"She doesn't understand..."\n\nReplace that thought with...\n\n"Maybe I should explain it one more time..."\n\nBecause I promise...\n\nI'll keep trying.\n\nNot because I have to.\n\nBecause I want to.\n\nU're worth understanding.\n\nUr feelings are worth understanding.\n\nUr silence is worth understanding.\n\nEven the parts of u that u think nobody will ever get...\n\nI want to know them.\n\nSlowly.\n\nPatiently.\n\nWithout rushing u.\n\nSo...\n\nCome here.\n\nTell me everything.\n\nStart from the beginning.\n\nOr the middle.\n\nOr the end.\n\nI don't care.\n\nJust let me in.\n\nBecause I don't want to know only the easy parts of u.\n\nI want all of u.\n\nAlways.\n\nI love u da.💋`
+    },
+    10: {
+        title: "When u feel like no one's on ur side..read this",
+        text: `My dearest Kadhu..\n\nRead this very carefully.\n\nBecause I need these words to stay inside that cute little head forever.\n\nIf one day the whole world feels against u...\n\nIf u feel misunderstood...\n\nIf nothing goes ur way...\n\nIf everyone disappoints u...\n\nIf u genuinely believe there's nobody left...\n\nThen I need u to remember one name.\n\nAmmu.\n\nI'm here.\n\nAlways.\n\nMaybe I won't always have the perfect words.\n\nMaybe I won't magically fix every problem.\n\nMaybe sometimes I'll cry with u because I don't know what else to do.\n\nBut leave? \n\nNo.\n\nNot because things got difficult.\n\nNot because life became messy.\n\nNot because u had a bad day.\n\nI'm on ur team.\n\nAlways.\n\nWhen u win...\n\nI'll clap the loudest.\n\nWhen u lose...\n\nI'll still sit beside u.\n\nWhen u doubt urself...\n\nI'll remind u who u are.\n\nWhen everyone else forgets to ask if u're okay...\n\nI'll still ask.\n\nBecause that's what loving u means.\n\nAnd listen...\n\nThe world doesn't get to decide ur worth.\n\nOne rejection doesn't.\n\nOne failure doesn't.\n\nOne mistake definitely doesn't.\n\nYou're still my Kadhu.\n\nThe same boy I fell in love with.\n\nThe same boy whose smile can fix my mood.\n\nThe same boy I'd choose again...\n\nAnd again...\n\nAnd again.\n\nSo if today feels like nobody's standing beside u...\n\nPretend I'm there.\n\nHolding ur hand.\n\nStanding shoulder to shoulder with u.\n\nLooking at whatever life threw at us and saying...\n\n"Okay...come on then."\n\nBecause that's what we'll always do.\n\nFace things together.\n\nIt's never...\n\n"You."\n\nIt's never...\n\n"Me."\n\nIt's always...\n\nUs.\n\nNow close this letter...\n\nTake a deep breath...\n\nLift that handsome face up...\n\nAnd go show the world why I'm so unbelievably proud to call u mine.\n\nI love u more than yesterday...\n\nAnd somehow...\n\nLess than tomorrow.\n\nForever ur ammu.💋`
+    }
+};
+
+function openLetter(id) {
+    const selected = letters[id];
+    if (selected) {
+        document.getElementById("modal").style.display = "flex";
+        document.getElementById("title").innerText = selected.title;
+        document.getElementById("text").innerText = selected.text;
+        
+        // Auto-scroll inside the letter paper straight to the top when opened
+        document.getElementById("modalContent").scrollTop = 0;
+    }
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

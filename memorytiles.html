@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Memory Tiles 💗</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Quicksand',sans-serif;
+    background:linear-gradient(135deg,#a7dbf2 0%,#f7b7d6 100%);
+    min-height:100vh;
+    overflow-x:hidden;
+    color:#334155;
+    position:relative;
+}
+
+/* Floating doodles */
+
+.doodle{
+    position:absolute;
+    font-size:24px;
+    opacity:.65;
+    animation:float 7s ease-in-out infinite;
+    user-select:none;
+}
+
+.doodle:nth-child(1){top:4%;left:6%;}
+.doodle:nth-child(2){top:8%;right:8%;animation-duration:9s;}
+.doodle:nth-child(3){top:22%;left:8%;animation-duration:6s;}
+.doodle:nth-child(4){top:35%;right:10%;}
+.doodle:nth-child(5){top:55%;left:6%;animation-duration:8s;}
+.doodle:nth-child(6){bottom:18%;right:12%;animation-duration:5s;}
+.doodle:nth-child(7){bottom:8%;left:12%;}
+.doodle:nth-child(8){bottom:25%;right:35%;}
+.doodle:nth-child(9){top:72%;left:45%;animation-duration:10s;}
+.doodle:nth-child(10){top:16%;left:45%;animation-duration:6.5s;}
+
+@keyframes float{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-18px) rotate(10deg);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+/* Header */
+
+header{
+
+padding:30px 20px 10px;
+text-align:center;
+position:relative;
+z-index:2;
+
+}
+
+   /* ===== Magical Bubble Back Button ===== */
+
+.backBtn{
+    position:absolute;
+    top:18px;
+    left:18px;
+
+    width:58px;
+    height:58px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:50%;
+    text-decoration:none;
+
+    overflow:visible;
+
+    background:
+    radial-gradient(circle at 28% 25%,
+    rgba(255,255,255,.95) 0%,
+    rgba(255,255,255,.45) 18%,
+    transparent 30%),
+
+    linear-gradient(
+    135deg,
+    rgba(170,225,255,.72),
+    rgba(255,204,235,.75)
+    );
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:2px solid rgba(255,255,255,.75);
+
+    box-shadow:
+    0 12px 30px rgba(255,105,180,.18),
+    inset 0 3px 8px rgba(255,255,255,.8),
+    inset 0 -6px 10px rgba(173,216,255,.25);
+
+    animation:bubbleFloat 4s ease-in-out infinite;
+
+    transition:.25s ease;
+}
+
+.backBtn:hover{
+    transform:scale(1.08);
+}
+
+.backBtn:active{
+    transform:scale(.94);
+}
+
+.backArrow{
+    width:25px;
+    height:25px;
+    filter:drop-shadow(0 2px 4px rgba(255,255,255,.6));
+}
+
+.bubble1,
+.bubble2{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.45);
+    backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.75);
+}
+
+.bubble1{
+    width:13px;
+    height:13px;
+    right:-4px;
+    bottom:7px;
+    animation:miniBubble1 3s ease-in-out infinite;
+}
+
+.bubble2{
+    width:8px;
+    height:8px;
+    right:-12px;
+    top:12px;
+    animation:miniBubble2 2.7s ease-in-out infinite;
+}
+
+@keyframes bubbleFloat{
+    0%,100%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-4px);
+    }
+}
+
+@keyframes miniBubble1{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-5px);
+    }
+}
+
+@keyframes miniBubble2{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:30px;
+    margin-top:20px;
+    color:#db2777;
+}
+
+.subtitle{
+
+margin-top:6px;
+font-size:16px;
+font-weight:700;
+color:#475569;
+
+}
+
+/* Score */
+
+.stats{
+
+width:92%;
+max-width:500px;
+margin:20px auto;
+
+display:flex;
+justify-content:space-between;
+
+background:rgba(255,255,255,.45);
+
+backdrop-filter:blur(12px);
+
+padding:18px;
+
+border-radius:22px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+font-family:'Fredoka',sans-serif;
+
+z-index:2;
+
+position:relative;
+
+}
+
+.stats span{
+
+display:block;
+
+margin-top:5px;
+
+font-size:22px;
+
+color:#db2777;
+
+}
+
+/* ==========================
+   GAME BOARD
+========================== */
+
+#gameBoard{
+    width:min(95vw,650px);
+    margin:25px auto 50px;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+    position:relative;
+    z-index:2;
+}
+
+/* ==========================
+   CARD
+========================== */
+
+.card{
+    aspect-ratio:1;
+    perspective:1000px;
+    cursor:pointer;
+}
+
+.cardInner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:.6s;
+}
+
+.card.flip .cardInner{
+    transform:rotateY(180deg);
+}
+
+.front,
+.back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:18px;
+    backface-visibility:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* Envelope */
+
+.front{
+    background:rgba(255,255,255,.55);
+    backdrop-filter:blur(12px);
+    border:2px solid #ffd4e6;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    font-size:34px;
+    color:#db2777;
+}
+
+/* Emoji */
+
+.back{
+    transform:rotateY(180deg);
+    background:rgba(255,255,255,.85);
+    border:2px solid #bae6fd;
+    font-size:32px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* ==========================
+   HAPPY BOUNCE
+========================== */
+
+.card.matched{
+    animation:bounce .5s;
+}
+
+@keyframes bounce{
+
+0%{transform:scale(1);}
+30%{transform:scale(1.15);}
+60%{transform:scale(.92);}
+100%{transform:scale(1);}
+
+}
+
+/* ==========================
+   WIN POPUP
+========================== */
+
+#winPopup{
+
+position:fixed;
+inset:0;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.45);
+backdrop-filter:blur(5px);
+z-index:999;
+
+}
+
+.popupCard{
+
+width:90%;
+max-width:360px;
+
+background:white;
+
+padding:28px;
+
+border-radius:28px;
+
+text-align:center;
+
+box-shadow:0 15px 35px rgba(0,0,0,.18);
+
+}
+
+.popupCard h2{
+
+font-size:55px;
+
+margin-bottom:8px;
+
+}
+
+.popupCard h3{
+
+font-family:'Fredoka',sans-serif;
+
+color:#db2777;
+
+margin-bottom:10px;
+
+}
+
+.popupCard p{
+
+margin-bottom:20px;
+
+font-weight:700;
+
+}
+
+#voiceBtn,
+#playAgain{
+
+width:100%;
+
+border:none;
+
+border-radius:18px;
+
+padding:14px;
+
+margin-top:12px;
+
+font-family:'Fredoka',sans-serif;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
+#voiceBtn{
+
+background:#fbcfe8;
+
+color:#be185d;
+
+}
+
+#playAgain{
+
+background:#bae6fd;
+
+color:#0369a1;
+
+}
+
+#voiceBtn:active,
+#playAgain:active{
+
+transform:scale(.96);
+
+}
+
+/* ===== Cute Envelope ===== */
+
+.mail{
+    width:72%;
+    height:60%;
+    background:linear-gradient(135deg,#fff8fc,#ffe4ef);
+    border-radius:10px;
+    position:relative;
+    box-shadow:0 5px 12px rgba(255,105,180,.18);
+    overflow:hidden;
+}
+
+.mail::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(45deg,transparent 49%,#ffc8df 50%);
+}
+
+.mail::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(-45deg,transparent 49%,#ffc8df 50%);
+}
+
+.mail-heart{
+    position:absolute;
+    left:50%;
+    top:55%;
+    transform:translate(-50%,-50%);
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:#ff77b5;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    z-index:5;
+}
+
+/* ==========================
+   MEMORY LETTER
+========================== */
+
+#memoryPopup{
+
+position:fixed;
+inset:0;
+
+display:none;
+
+justify-content:center;
+align-items:center;
+
+background:rgba(0,0,0,.35);
+
+backdrop-filter:blur(5px);
+
+z-index:998;
+
+}
+
+.memoryLetter{
+
+width:88%;
+max-width:340px;
+
+background:white;
+
+padding:30px;
+
+border-radius:28px;
+
+text-align:center;
+
+box-shadow:0 15px 35px rgba(0,0,0,.18);
+
+animation:pop .35s ease;
+
+}
+
+@keyframes pop{
+
+0%{
+transform:scale(.75);
+opacity:0;
+}
+
+100%{
+transform:scale(1);
+opacity:1;
+}
+
+}
+
+.letterEmoji{
+
+font-size:48px;
+
+margin-bottom:10px;
+
+}
+
+.memoryLetter h3{
+
+font-family:'Fredoka',sans-serif;
+
+color:#db2777;
+
+margin-bottom:14px;
+
+}
+
+#memoryText{
+
+font-size:17px;
+
+line-height:1.7;
+
+margin-bottom:20px;
+
+font-weight:700;
+
+}
+
+#continueBtn{
+
+background:#ffd6ea;
+
+color:#be185d;
+
+border:none;
+
+padding:14px 22px;
+
+border-radius:18px;
+
+font-family:'Fredoka',sans-serif;
+
+font-size:16px;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+#continueBtn:active{
+
+transform:scale(.95);
+
+}
+
+/* ==========================
+   WIN POPUP
+========================== */
+
+#winPopup{
+    position:fixed;
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(0,0,0,.45);
+
+    backdrop-filter:blur(5px);
+
+    z-index:999;
+}
+
+.popupCard{
+
+width:90%;
+max-width:360px;
+
+background:white;
+
+padding:28px;
+
+border-radius:28px;
+
+text-align:center;
+
+box-shadow:0 15px 35px rgba(0,0,0,.18);
+
+}
+
+.popupCard h2{
+
+font-size:55px;
+
+margin-bottom:8px;
+
+}
+
+.popupCard h3{
+
+font-family:'Fredoka',sans-serif;
+
+color:#db2777;
+
+margin-bottom:10px;
+
+}
+
+.popupCard p{
+
+margin-bottom:20px;
+
+font-weight:700;
+
+}
+
+#voiceBtn,
+#playAgain{
+
+width:100%;
+
+border:none;
+
+border-radius:18px;
+
+padding:14px;
+
+margin-top:12px;
+
+font-family:'Fredoka',sans-serif;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
+#voiceBtn{
+
+background:#fbcfe8;
+
+color:#be185d;
+
+}
+
+#playAgain{
+
+background:#bae6fd;
+
+color:#0369a1;
+
+}
+
+#voiceBtn:active,
+#playAgain:active{
+
+transform:scale(.96);
+
+}
+
+</style>
+
+</head>
+
+<body>
+    
+    <!-- Love Letter Popup -->
+
+<div id="memoryPopup">
+
+    <div class="memoryLetter">
+
+        <div class="letterEmoji" id="memoryEmoji">
+            💗
+        </div>
+
+        <h3>A memory we know... 💌</h3>
+
+        <p id="memoryText"></p>
+
+        <button id="continueBtn">
+            ♡ Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Sounds -->
+
+<audio id="matchSound">
+    <source src="mwuah.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="voiceNote">
+    <source src="iloveyou.mp3" type="audio/mpeg">
+</audio>
+
+
+<!-- Floating Doodles -->
+
+<div class="doodle">☁️</div>
+<div class="doodle">✨</div>
+<div class="doodle">🌸</div>
+<div class="doodle">🫧</div>
+<div class="doodle">💗</div>
+<div class="doodle">🦋</div>
+<div class="doodle">☁️</div>
+<div class="doodle">🌷</div>
+<div class="doodle">💌</div>
+<div class="doodle">✨</div>
+
+
+<!-- Header -->
+
+<header>
+
+<a href="index.html" class="backBtn">
+
+    <svg class="backArrow" viewBox="0 0 24 24">
+        <defs>
+            <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff78b2"/>
+                <stop offset="100%" stop-color="#8ecfff"/>
+            </linearGradient>
+        </defs>
+
+        <path d="M15 5L8 12L15 19"
+              stroke="url(#arrowGradient)"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+    </svg>
+
+    <span class="bubble1"></span>
+    <span class="bubble2"></span>
+
+</a>
+
+<h1>💌 Memory Tiles</h1>
+
+<p class="subtitle">
+
+Can you remember all our little memories?
+
+</p>
+
+</header>
+
+
+<!-- Score -->
+
+<div class="stats">
+
+<div>
+
+Moves
+
+<span id="moves">
+
+0
+
+</span>
+
+</div>
+
+<div>
+
+Pairs
+
+<span id="pairs">
+
+0 / 18
+
+</span>
+
+</div>
+
+</div>
+
+
+<!-- Game -->
+
+<div id="gameBoard">
+
+<!-- JavaScript will create all 36 cards -->
+
+</div>
+
+
+
+<!-- Win Popup -->
+
+<div id="winPopup">
+
+<div class="popupCard">
+
+<h2>🎉</h2>
+
+<h3>
+
+You remembered every little memory...
+
+</h3>
+
+<p>
+
+just like you've remembered me. 💗
+
+</p>
+
+
+<button id="voiceBtn">
+
+🎵💋
+
+<br>
+
+Turn on only if you're alone...
+
+</button>
+
+
+<button id="playAgain">
+
+🌸 Play Again
+
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+const emojis = [
+"💋","💗","✨","🧿","🦋","🌝",
+"🫂","🫀","🫶","👩‍❤️‍💋‍👨","🌷","🚌",
+"🎂","✒️","📝","📞","🍀","🎮"
+];
+
+const memories = {
+"💋":"The kisses you deserve. 💋",
+"💗":"My love for you. 💗",
+"✨":"You are the light that came into my world of darkness. ✨",
+"🧿":"An evil eye... so no one can ever kannvekkal our love. 🧿",
+"🦋":"The butterflies that rush into my stomach every time I come in contact with you. 🦋",
+"🌝":"Our most-used emoji. 🌝",
+"🫂":"I just want to run into your arms and stay cuddled with you. 🫂",
+"🫀":"My heart will always beat for you. 🫀",
+"🫶":"Hehe... I love you. 🫶",
+"👩‍❤️‍💋‍👨":"Do you remember our first kiss in my living room? 👩‍❤️‍💋‍👨",
+"🌷":"My favourite flower. You made it even more special by remembering it. 🌷",
+"🚌":"The bus where you found out that I felt the same way about you. 🚌",
+"🎂":"I hope all your birthdays are special, and I hope you feel LOVEDDD every single time. I'll make sure of it. 🎂",
+"✒️":"The stories that made me yours. ✒️",
+"📝":"The book that I made for us. 📝",
+"📞":"All those late-night calls where you made feel so loved that now I can't live without you. 📞",
+"🍀":"The necklace you bought me... Did you know a four-leaf clover is a universal symbol of good luck? You're my luck. 🍀",
+"🎮":"Your second love after meee. 🎮"
+};
+
+let cards = [...emojis, ...emojis];
+const board = document.getElementById("gameBoard");
+
+let firstCard = null;
+let secondCard = null;
+let lockBoard = false;
+let moves = 0;
+let pairs = 0;
+
+// Function to start a clean game or completely reset it
+function initGame() {
+    moves = 0;
+    pairs = 0;
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+
+    document.getElementById("moves").textContent = moves;
+    document.getElementById("pairs").textContent = "0 / 18";
+
+    // Shuffle the items cleanly
+    cards.sort(() => Math.random() - 0.5);
+
+    // Wipe previous items and generate fresh card HTML blocks
+    board.innerHTML = "";
+    cards.forEach(emoji => {
+        board.innerHTML += `
+            <div class="card">
+                <div class="cardInner">
+                    <div class="front">
+                        <div class="mail">
+                            <div class="mail-heart">♡</div>
+                        </div>
+                    </div>
+                    <div class="back">
+                        ${emoji}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Fire up the board layout immediately on load
+initGame();
+
+// Centralized click controller for handling card selections safely
+board.addEventListener("click", (e) => {
+    const card = e.target.closest(".card");
+    
+    // Safety blocks: ignore if panel locked, clicked item is blank, or already active/solved
+    if (!card || lockBoard) return;
+    if (card === firstCard) return;
+    if (card.classList.contains("flip") || card.classList.contains("matched")) return;
+
+    card.classList.add("flip");
+
+    // If this is the first selection, save it and stop processing further for now
+    if (!firstCard) {
+        firstCard = card;
+        return; 
+    }
+
+    // Processing the second card selection down here
+    secondCard = card;
+    lockBoard = true; // Lock further interactions instantly while processing match check
+
+    const firstEmoji = firstCard.querySelector(".back").textContent.trim();
+    const secondEmoji = secondCard.querySelector(".back").textContent.trim();
+
+    moves++;
+    document.getElementById("moves").textContent = moves;
+
+    if (firstEmoji === secondEmoji) {
+        // Success match routine
+        if(document.getElementById("matchSound")) {
+            document.getElementById("matchSound").play().catch(() => {});
+        }
+        pairs++;
+        document.getElementById("pairs").textContent = pairs + " / 18";
+
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+
+        // Populate and open up the Love Letter Memory Popup box
+        document.getElementById("memoryEmoji").textContent = firstEmoji;
+        document.getElementById("memoryText").textContent = memories[firstEmoji];
+        document.getElementById("memoryPopup").style.display = "flex";
+
+        // Handle closure mechanics for the memory window
+        document.getElementById("continueBtn").onclick = () => {
+            document.getElementById("memoryPopup").style.display = "none";
+            
+            // Clean out current card parameters to clear state tracks
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+
+            // FIX: Only trigger victory popup window AFTER memory box gets fully dismissed!
+            if (pairs === 18) {
+                setTimeout(() => {
+                    document.getElementById("winPopup").style.display = "flex";
+                }, 400);
+            }
+        };
+    } else {
+        // Failed matching attempt routine: spin cards back face-down
+        setTimeout(() => {
+            firstCard.classList.remove("flip");
+            secondCard.classList.remove("flip");
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+        }, 800);
+    }
+});
+
+// Audio button execution logic
+if (document.getElementById("voiceBtn")) {
+    document.getElementById("voiceBtn").onclick = () => {
+        document.getElementById("voiceNote").play();
+    };
+}
+
+// FIX: Play Again interaction completely sets up a brand new fresh layout match set
+if (document.getElementById("playAgain")) {
+    document.getElementById("playAgain").onclick = () => {
+        document.getElementById("winPopup").style.display = "none";
+        initGame();
+    };
+}
+
+</script>
+
+</body>
+</html>

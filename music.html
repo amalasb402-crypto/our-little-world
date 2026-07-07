@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certified Karthi Classics 🎧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        
+    <style>
+        :root {
+            --bg-color: #FFF5F5;
+            --text-color: #4A3E3D;
+            --primary-accent: #FF7B93;
+            --player-bg: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--primary-accent);
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header .subtitle {
+            font-size: 15px;
+            font-weight: 700;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* The Main Player Card */
+        .player-card {
+            background: var(--player-bg);
+            width: 100%;
+            max-width: 350px;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow:
+0 20px 45px rgba(255,123,147,.18),
+0 0 20px rgba(255,190,210,.3);
+            text-align: center;
+            box-sizing: border-box;
+            border: 2px solid #FFE3E7;
+        }
+
+        /* Spinning Record Art */
+        .album-art{
+    width:160px;
+    height:160px;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border-radius:50%;
+    animation:spin 8s linear infinite;
+    animation-play-state:paused;
+}
+
+.record{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:50%;
+    display:block;
+}
+        .album-art.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .song-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 22px;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .artist-name {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Playback Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#FFE8EE;
+    color:#FF7B93;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 10px rgba(255,123,147,.18);
+    transition:.25s;
+    padding:0;
+}
+
+.play-btn{
+    width:56px;
+    height:56px;
+    background:linear-gradient(135deg,#FF8CA5,#FF6F91);
+    color:white;
+    box-shadow:0 8px 22px rgba(255,111,145,.45);
+}
+
+.icon{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    height:100%;
+    font-weight:bold;
+    color:inherit;
+    font-size:24px;
+}
+
+.play{
+    font-size:28px;
+}
+
+.prev,
+.next{
+    font-size:24px;
+}
+
+.shuffle,
+.repeat{
+    font-size:22px;
+}
+
+        .control-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Scrollable Playlist of 25 Songs */
+        .playlist {
+            width: 100%;
+            max-width: 350px;
+            margin-top: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #FFE3E7;
+            max-height: 250px; /* Limits height so it scrolls */
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .playlist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #FFE3E7;
+            cursor: pointer;
+            transition: all .25s ease;
+            border-radius: 12px;
+        }
+
+        .playlist-item:last-child {
+            border-bottom: none;
+        }
+
+        .playlist-item:active {
+            background-color: #FFF5F5;
+        }
+
+.playlist-item:hover{
+    background:#FFF5F8;
+    transform:translateX(6px);
+}
+
+       .playlist-item.active {
+    background: linear-gradient(135deg,#FF8CA5,#FF6F91);
+    color: white;
+    transform: scale(1.02);
+    box-shadow: 0 8px 18px rgba(255,123,147,.25);
+}
+
+        .playlist-item.active .list-artist {
+            color: #FFE3E7;
+        }
+
+        .list-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .list-artist {
+            font-size: 12px;
+            color: #888;
+            margin: 0;
+        }
+
+.progress-container{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:15px;
+}
+
+#progressBar{
+    flex:1;
+    accent-color:#FF7B93;
+}
+
+.volume-container{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:15px;
+}
+
+#volumeSlider{
+    flex:1;
+    accent-color:#FF7B93;
+}
+
+.volume-icon{
+    color:#FF7B93;
+    font-size:20px;
+    width:24px;
+    text-align:center;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Certified Karthi Classics🎧</h1>
+        <p class="subtitle">wanna listen to some of your favs?</p>
+    </div>
+
+    <div class="player-card">
+        
+        <div class="album-art" id="albumArt">
+    <img src="record.png" class="record" alt="Vinyl Record">
+</div>
+
+                <h2 class="song-title" id="currentTitle">Select a song...</h2>
+        <p class="artist-name" id="currentArtist">to start listening</p>
+
+        <div class="controls">
+    <button class="control-btn" id="shuffleBtn" onclick="toggleShuffle()">
+    <i class="fa-solid fa-shuffle icon shuffle"></i>
+</button>
+
+    <button class="control-btn" onclick="prevSong()"><span class="icon prev">⏮</span></button>
+
+  <button class="control-btn play-btn" id="playBtn" onclick="togglePlay()">
+    <span id="playIcon" class="icon play">▶</span>
+</button>
+
+    <button class="control-btn" onclick="nextSong()"><span class="icon next">⏭</span></button>
+
+    <button class="control-btn" id="repeatBtn" onclick="toggleRepeat()"><span class="icon repeat">↺</span></button>
+</div>
+        
+        <div class="progress-container">
+    <span id="currentTime">0:00</span>
+
+    <input type="range"
+           id="progressBar"
+           value="0"
+           min="0"
+           max="100">
+
+    <span id="totalTime">0:00</span>
+</div>
+
+<div class="volume-container">
+    <i class="fa-solid fa-volume-high volume-icon"></i>
+    
+    <input type="range"
+           id="volumeSlider"
+           min="0"
+           max="1"
+           step="0.01"
+           value="1">
+</div>
+
+    </div>
+
+    <div class="playlist" id="playlistContainer">
+        </div>
+
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        // Here is your custom array of 25 songs!
+        // When you download the MP3s, just make sure to name them song1.mp3, song2.mp3, etc.
+        const songs = [
+    { title: "Blue", artist: "Yung Kai", file: "song1.mp3" },
+    { title: "Blinding Lights", artist: "The Weeknd", file: "song2.mp3" },
+    { title: "Heat Waves", artist: "Glass Animals", file: "song3.mp3" },
+    { title: "Senjitaley", artist: "Anirudh Ravichander", file: "song4.mp3" },
+    { title: "Minnalai Pidithu", artist: "Unni Menon", file: "song5.mp3" },
+    { title: "Enakenna Yarum Illaye", artist: "Anirudh Ravichander", file: "song6.mp3" },
+    { title: "Innum Konjum Neram", artist: "A.R. Rahman, Vijay Prakash & Shweta Mohan", file: "song7.mp3" },
+    { title: "Perfect", artist: "Ed Sheeran", file: "perfect.mp3" },
+    { title: "Let Her Go", artist: "Passenger", file: "song9.mp3" },
+    { title: "Night Changes", artist: "One Direction", file: "song10.mp3" },
+    { title: "What Economy", artist: "SA", file: "song11.mp3" },
+    { title: "Shinunoga E-Wa", artist: "Fujii Kaze", file: "song12.mp3" },
+    { title: "Lonely", artist: "Akon", file: "song13.mp3" },
+    { title: "Thoominnal", artist: "Haricharan", file: "song14.mp3" },
+    { title: "Aathi", artist: "Anirudh Ravichander", file: "song15.mp3" },
+    { title: "Thangamey", artist: "Anirudh Ravichander", file: "song16.mp3" },
+    { title: "Ore Kinnaragaanam", artist: "Deepak Dev", file: "song17.mp3" },
+    { title: "Raave", artist: "Haricharan", file: "song18.mp3" },
+    { title: "Dagabaaz Re", artist: "Rahat Fateh Ali Khan & Shreya Ghoshal", file: "song19.mp3" },
+    { title: "Njan", artist: "Gopi Sundar", file: "song20.mp3" },
+    { title: "Diet Mountain Dew", artist: "Lana Del Rey", file: "song21.mp3" },
+    { title: "I Wanna Be Yours", artist: "Arctic Monkeys", file: "song22.mp3" },
+    { title: "Sunflower", artist: "Post Malone & Swae Lee", file: "song23.mp3" },
+    { title: "Aathma Raama", artist: "Brodha V", file: "song24.mp3" },
+    { title: "Aigiri Nandini", artist: "Brodha V", file: "song25.mp3" }
+];
+        let currentIndex = 0;
+let isPlaying = false;
+let shuffle = false;
+let repeat = false;
+
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const currentTitle = document.getElementById('currentTitle');
+        const currentArtist = document.getElementById('currentArtist');
+        const albumArt = document.getElementById('albumArt');
+        const playlistContainer = document.getElementById('playlistContainer');
+
+const progressBar = document.getElementById("progressBar");
+const currentTime = document.getElementById("currentTime");
+const totalTime = document.getElementById("totalTime");
+const volumeSlider = document.getElementById("volumeSlider");
+
+        // Build the playlist menu visually
+        function buildPlaylist() {
+            playlistContainer.innerHTML = "";
+            songs.forEach((song, index) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                item.id = `song-${index}`;
+                item.innerHTML = `
+                    <div>
+                        <p class="list-title">${index + 1}. ${song.title}</p>
+                        <p class="list-artist">${song.artist}</p>
+                    </div>
+                    <div>🎵</div>
+                `;
+                item.onclick = () => loadAndPlay(index);
+                playlistContainer.appendChild(item);
+            });
+        }
+
+        // Load a specific song
+        function loadAndPlay(index) {
+            // Remove highlight from old song
+            const oldActive = document.querySelector('.playlist-item.active');
+            if (oldActive) oldActive.classList.remove('active');
+
+            currentIndex = index;
+            const song = songs[currentIndex];
+            
+            // Update text
+            currentTitle.innerText = song.title;
+            currentArtist.innerText = song.artist;
+            
+            // Highlight new song in list
+            document.getElementById(`song-${index}`).classList.add('active');
+
+            // Load audio 
+            audioPlayer.src = song.file; 
+            
+            playAudio();
+        }
+
+        function togglePlay() {
+            if (currentTitle.innerText === "Select a song...") {
+                loadAndPlay(0); // Play first song if none selected
+                return;
+            }
+            if (isPlaying) {
+                pauseAudio();
+            } else {
+                playAudio();
+            }
+        }
+
+        function playAudio() {
+            audioPlayer.play().catch(()=>console.log("Waiting for real MP3s to be added!")); 
+            isPlaying = true;
+            playBtn.innerHTML = '<span id="playIcon" class="icon play">❚❚</span>';
+            albumArt.classList.add('playing'); // Starts spinning
+        }
+
+        function pauseAudio() {
+            audioPlayer.pause();
+            isPlaying = false;
+            playBtn.innerHTML = '<span id="playIcon" class="icon play">▶</span>';
+                        albumArt.classList.remove('playing'); // Stops spinning
+        }
+
+        function nextSong() {
+
+    if (shuffle) {
+
+        let randomIndex;
+
+        do {
+            randomIndex = Math.floor(Math.random() * songs.length);
+        } while (randomIndex === currentIndex && songs.length > 1);
+
+        loadAndPlay(randomIndex);
+        return;
+    }
+
+    let nextIndex = currentIndex + 1;
+
+    if (nextIndex >= songs.length) {
+        nextIndex = 0;
+    }
+
+    loadAndPlay(nextIndex);
+}
+
+        function prevSong() {
+            let prevIndex = currentIndex - 1;
+            if (prevIndex < 0) prevIndex = songs.length - 1; // Loop to end
+            loadAndPlay(prevIndex);
+        }
+
+        // When a song ends naturally, go to the next one
+        audioPlayer.onended = () => {
+
+    if (repeat) {
+        loadAndPlay(currentIndex);
+    } else {
+        nextSong();
+    }
+
+};
+
+        // Start by building the list
+        buildPlaylist();
+        
+        function formatTime(time){
+    const mins=Math.floor(time/60);
+    const secs=Math.floor(time%60);
+    return mins+":"+(secs<10?"0":"")+secs;
+}
+
+audioPlayer.addEventListener("loadedmetadata",()=>{
+    progressBar.max=Math.floor(audioPlayer.duration);
+    totalTime.textContent=formatTime(audioPlayer.duration);
+});
+
+audioPlayer.addEventListener("timeupdate",()=>{
+    progressBar.value=audioPlayer.currentTime;
+    currentTime.textContent=formatTime(audioPlayer.currentTime);
+});
+
+progressBar.addEventListener("input",()=>{
+    audioPlayer.currentTime=progressBar.value;
+});
+
+volumeSlider.addEventListener("input",()=>{
+    audioPlayer.volume=volumeSlider.value;
+});
+
+function toggleShuffle(){
+
+    shuffle = !shuffle;
+
+    const btn = document.getElementById("shuffleBtn");
+
+    if(shuffle){
+        btn.style.background = "#FF7B93";
+        btn.style.color = "white";
+    }else{
+        btn.style.background = "#FFE8EE";
+        btn.style.color = "#FF7B93";
+    }
+
+}
+
+function toggleRepeat(){
+
+    repeat = !repeat;
+
+    const btn = document.getElementById("repeatBtn");
+
+    if(repeat){
+        btn.style.background = "#FF7B93";
+        btn.style.color = "white";
+    }else{
+        btn.style.background = "#FFE8EE";
+        btn.style.color = "#FF7B93";
+    }
+
+}
+
+    </script>
+</body>
+</html>
