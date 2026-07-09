@@ -19,13 +19,11 @@ body {
 /* HEADER STYLE */
 .header-container {
     text-align: center;
-    /* Added generous side padding to ensure the title never hits or overlaps the top-right button */
     padding: 40px 75px 15px 75px; 
 }
 
 @media (max-width: 450px) {
     .header-container {
-        /* Pushes the header text down slightly on tiny screens so the layout stays perfectly clean */
         padding: 65px 20px 15px 20px;
     }
 }
@@ -48,7 +46,7 @@ h1 {
     text-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* ✏️ CUSTOM PENCIL BUBBLE BUTTON */
+/* CUSTOM PENCIL BUBBLE BUTTON */
 .fab-add {
     position: fixed;
     top: 20px;
@@ -57,7 +55,7 @@ h1 {
     border: 2px solid rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    width: 46px; /* Optimized, subtle size */
+    width: 46px; 
     height: 46px;
     border-radius: 50%;
     display: flex;
@@ -65,7 +63,7 @@ h1 {
     align-items: center;
     cursor: pointer;
     box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    z-index: 100; /* Keeps it reliably safe above cards */
+    z-index: 100; 
     transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
 }
 
@@ -126,10 +124,10 @@ h1 {
 }
 
 .card-text {
-    flex-grow: 1; /* Pushes the delete button to the far right */
+    flex-grow: 1;
 }
 
-/* ❌ INLINE DELETE BUTTON */
+/* INLINE DELETE BUTTON */
 .card-delete {
     font-size: 1.5rem;
     color: #ff9ad5;
@@ -208,7 +206,6 @@ h1 {
 .s-cloud    { bottom: 8%; left: 6%; font-size: 1.8rem; }
 .s-kiss     { bottom: 10%; right: 6%; font-size: 2rem; transform: rotate(10deg); }
 
-
 /* Text Formatting */
 #modalContent h2 {
     font-family: 'Quicksand', sans-serif;
@@ -265,8 +262,7 @@ h1 {
 }
 #close:active { background: #ff9ad5; color: white; }
 
-
-/* 💌 ADD NEW LETTER POPUP MODAL */
+/* ADD NEW LETTER POPUP MODAL */
 #addModal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -287,7 +283,7 @@ h1 {
     padding: 35px 25px 30px 25px;
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    text-align: left; /* Left align for cleaner structure */
+    text-align: left; 
     position: relative;
 }
 
@@ -353,10 +349,8 @@ h1 {
 .add-content button.save-btn:active {
     transform: scale(0.96);
 }
-
 </style>
 </head>
-
 <body>
 
 <div class="fab-add" onclick="openAddModal()" title="Write a new letter">
@@ -387,7 +381,6 @@ h1 {
 <div id="modal">
     <div id="modalContent">
         <div class="washi-tape"></div>
-        
         <div class="sticker s-hearts">💕</div>
         <div class="sticker s-sparkle">✨</div>
         <div class="sticker s-camera">📸</div>
@@ -420,25 +413,48 @@ h1 {
     </div>
 </div>
 
-<script>
-const letters = {
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+// REAL FIREBASE CONFIG INSERTED HERE
+const firebaseConfig = {
+  apiKey: "AIzaSyD9lzo0sUii8-luG5UXl-UN9JM-cdMScQQ",
+  authDomain: "ourapp-bc0e3.firebaseapp.com",
+  projectId: "ourapp-bc0e3",
+  storageBucket: "ourapp-bc0e3.firebasestorage.app",
+  messagingSenderId: "204306533947",
+  appId: "1:204306533947:web:7a69612745d0db6512161e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const lettersRef = collection(db, "letters");
+
+// Unified object merging original 10 with new Firebase docs
+window.allLetters = {
     1: { title: "When u miss me..read this", text: `My dearest Kadhu...\n\nIf you are reading this..ig today's one of those days where u would usually say in ur language a little quieter that usual..maybe I'm a bit far away from u, or maybe closeby but still we can't meet or talk kind of situation, or maybe due to some reason I may not be able to call u..or maybe this is one of those nights where u stay awake and misses me.. whatever it is..u miss me that's the point. I miss u too ponna everyday every minute every second that I spend without u besides me without your lips touching mine..even when u are with me I miss u whenever there is a slight distance btw us without touching...I miss u..soo it's pretty common to miss ur loved one. I wish I could be there with u like teleport cheyth varana reethil whenever u think of me .. actually I think that would be chaotic..given that u think of me everytym even during not so me coming places or situations..what if like u are taking a poop and think of me and suddenly I'm there sitting on ur lap while u take a poop...ohmyygodddd nasttyy..anyway Njan entha paranjond irunne oh ya..even though I can't do that, just know that just like u ;I would give my everything to be with u. I'm alwaysss with u. I'm always here rooting for u in places that u think no ones on ur side. I'm always ur ammu. Even if u miss me now..soon u are gonna meet me don't be saddddd kathuuu it's not like I'm gonna go thatttttt far from u . my kutti heart can't bear that much but even if one day I did then alsooo I'm flyinggg backk to u every minute i could spare..but if it's too much to handle like u miss me really reallyy reallyyyyyyyy then do whatever ur instincts say..call me..then call me..mathil chadi varan anel mathil chadi vaa..maybe i would scold u a little but in the end of the day I too need u just the way u need me...nowww odi poyi Snd me a text saying "baby i really miss u I need u" no matter where I'm, no matter what situation I'm, i will try my besttt to call u.. don't ever think u are gonna bother me by saying that. Ente pottane Enikk arinjoode. Even if I say I'm busy doing smth.. I'm never too busy for u baby.. soo shooo poyi Enikk msg iddddd...` },
     2: { title: "When u feel like u are not enough..read this...", text: `My dearest Kadhu...\n\nWhy do u feel like u are not enough..is it smth that I said which made u feel this way or is it due some kind thought that rushed into that pretty -usually so smart but ippo athra alla- brain...kadhutta..u my baby is the mosttt precious thing in this entireeee world..do u know I love u soo soo sooo much. If it's smth i told u that's bothering u..firstly I'm sorry ponna i didn't mean it that way i don't ever want to make u feel like this ever whatever it is that I said was never meant to attack u like that.....but if it made u feel this way then I'm really sorry ponna. I never want my words to become the reason u question ur worth. Kathu u are that one thing I would sacrifice my everything for..u are enough ok. Ik allelum ninakk usually dbts ondavarond whether u are enough for me..whether u deserve the love angane kind of stupid thoughts whether u are indeed the green flag which I say u are..do u think I'm stupid if I ever felt like u were not enough i wouldn't have invested my tym and efforts and love for u.. but i did r8 so what does that mean ...I really love u. And all I want is for u to know ur worth. U are my karthi. u deserve everything and anything the world has to offer.\n\nEven if it's something else that's bothering u...come talk to me..call me and tell me what's bothering u..u trust ur ammu r8. U venting out ur emotions to me will not be bothering but ur silence when u are lost in thoughts that sabotage ur worth in ur own eyes is what will infact bother me.. atleast for me talk to me I will for sure try my best to make u see what I see .U don't have to organize ur thoughts before calling me. U don't have to figure everything out first. U don't have to come with solutions. Just come as u are. Cry if u want to. Be angry if u want to. Sit in silence if u want to. Tell me "baby onnum mindanda..." and I'll stay. Tell me "baby let me talk..." and I'll listen. Tell me "baby enikk onnum ariyilla..." and we'll figure it out together. That's literally the fking point . U don't have to fight ur battles alone when u have me. It's always U and Me..even when we fight even we are sad even when it feels like not talking to eachother it's always been and will be 'u and me' ...never ever against each other\n\nAnd do u know what i see when I look at u..if u could see it U would realize how adorable u are when u smile, how cute u look when u talk about ur games the techy stuffs all those things that u love, how safe u make me feel, how patient u are with me even when I'm being a complete menace, how u somehow manage to make me feel like the most loved girl in the world. If only u could see urself through my eyes...I don't think u would ever question ur worth again.\n\nYou are my brave boy. You try again and again. You made it ur mission to make me feel soo loved that u keep on inventing new ways to love. The efforts u put makes u a diamond ponna..the most precious Lil diamond of mine. I see someone who tries. Even when u don't realize it. I see someone who carries more than he tells people. I see someone who forgets "it's okay" even when it isn't. I see someone who loves quietly instead of loudly. I see someone who has the softest heart but hides it behind "it's fine." I see someone who deserves to be loved so gently that he never has to question it again..and i know u better than everyone in this freaking world..so ente ponn call me and talk to me..tell me " onnum parayaruth let me talk" i would listen to u ..afterall u are my everything. I love u da.. and whatever it is that made u feel this way is stupid coz u are ENOUGH.\n\nSooo...before u close this letter I need u to do one thing for me. Promise me u won't let one bad day decide ur worth. Promise me u won't believe every negative thought that enters that cute little brain of yours.\n\nAnd if after reading this u still somehow feel like u are not enough...then I have only one solution..Call me.💋` },
     3: { title: "When u feel angry at me..read this..", text: `My dearest Kadhu..\n\nBreathe...\n\nClose you eyes....count backwards from 20-0\n\nFirst ente ponn calm Avan nokk oke...\n\nTake deep breaths inhale then hold for a few seconds then exhale...onn cool avum vara ith chey..ok then read the rest..ok\n\nWe don't want to make things worst by saying things that wasn't meant to be said just because we are angry r8..athe ellam ichikoode mess up akkole so relax av athyam..we will find a solution \n\nOk ayo?..like calm ayo..now listen..do u want a hug..like korach neram onnum mindand chumma kettipidich irikkano..if not it's okay...\n\nIng baa ammune kettipidich irinno korach neram..i don't know why u are feeling this way what happened onnum Enikk ariyulla maybe it's because of smth else...maybe it's because of me..maybe fought again..but thalkalathekk what we are gonna do is not think Abt it...u must be here after telling me Njan pinne vilikkam r8..u need space so that's what u are gonna do\n\nJust relax av..think I'm hugging u... there's nothing wrong no fights no arguments onnum nadannittillatha pole we are hugging okey...\n\nOnce u feel okey enough to talk we can. \n\nPonna...did we fight again...entha pattiye...\n\nEnte ponn Enikk vendi oru karyam cheyyavo...now that u are calm..rewind back and answer these questions...\n\nWhat was the reason for this fight..ath enthum avallo arelum ninne chorinjathavam..Njan vayithonniya paranja avam..maybe I sounded like i don't trust u..maybe ninte mistake um avam..or maybe mine...we don't know yet.\n\nSoo athyam enth konda thodangiye aloikk...\n\nNow...that u know the reason...who are u angry with.. what are are u angry for...\n\nNow think what u did after...ik u think this won't work trust me please...\n\nDid u raise ur voice...? Did u stay silent...? Did u walk away...? Did u say something just because u were angry...? Or did u just stop talking hoping everything would magically become okay...?\n\nNow one more question...\n\nIf this fight was with me...\n\nBefore deciding who was right and who was wrong...can u please try seeing it from my side too...just for a minute...I'm not asking u to immediately agree with me. I'm not saying I'm always right either. But baby you know me better than anyone r8...I don't get hurt for fun. If something made me react...there was probably a reason behind it. Maybe I misunderstood u...maybe u misunderstood me...or maybe both of us were hurting at the same time without realizing it.\n\nAthe pole ik mwuthe that u won't get angry just because for fun..there is a reason for u anger..i really do know that..\n\nThink about what I was trying to say...not just how I said it. Because sometimes my words come out all messy when I'm emotional. What I'm trying to say and what actually comes out become two different things. If u only remember my tone...u might miss what my heart was actually trying to tell u. And that applys for u too when u get emotional ur words became unknowingly harsher not because u hate me but because that's how u express ur anger. And that's a mistake i do too my focus shifts to the tone instead of the words.. I'm changing ponna i do wanna become better for you... but there might be days when i would still do that unknowingly not because I question ur love for me but because I don't have an anchor to hold my emotions down when u feel distant.. usually it's u who does that..so remind me of that remind me of how the tone doesn't matter the words do...nee allathe ar enne thiruthana\n\nAnd I'll promise u something too...\n\nI'll do the same for u.\n\nI'll try to understand why u reacted the way u did instead of immediately thinking u don't care. I'll listen to what u're trying to say even if ur words come out wrong because u're angry.\n\nBecause at the end of the day...it's never supposed to be Ammu versus Kathu.It's always us versus the problem.\n\nBaby...winning an argument has never been more important to me than having u. I'd rather sit with u for hours and solve one misunderstanding than spend days pretending I don't miss u.\n\nSo...if after thinking about everything...u still feel like I'm wrong...come tell me. Explain it to me. I promise I'll listen.\n\nAnd if u realize u made a mistake...it's okay. We all do. Just come back. Because no matter how angry we get...I never want anger to become bigger than us.\n\nNow...oru karyom koodu\n\nDrink some water.\n\nWash ur face.\n\nTake one more deep breath.\n\nAnd when u're ready...\n\nCome find me..your ammu\n\nWe'll figure it out together...like we always do.\nI love u da. Always.💋` },
     4: { title: "When u feel happy..read this", text: `My dearest Kadhu...\n\nAnd now this would be the one letter I would like u to open everyyyyydayyy everyy momenttt\n\nSoooo what made my babyyyy this happyy😽💋did i gave u ' p and b ' actually i think (like oru 70%) u are gonna open this the first day u get this website in ur hands..or maybe not..but i really do think that since like I'm gonna ask u to promise me that "only when u feel it u open it" kinda deal...so most probably u are gonna be like " I'm happyy now so I'm gonna open thiss now.."\n\nThere's a slight chance actually make the other one a solid 90...soo a 10% chance that u won't..anyways that's notttt the matter heree\n\nSooo I'm sooo happy that my babyyy is happyyy🙂‍↕️💕....\n\n✨u happy= send me tuttus = me happyyy✨\n\nSo what made my adorable boyfriend happy ...is it me(I hope it's meee coz I loveee it when I make uu happyyyy it feeelsss sooo goooodd)..or is it that u bought a new game?..orrr did get a lottery (send me half the moneyyyy🙂‍↕️nvm snd me ¾ of it.. I'll keep it SAFEE~🤥) do u knowww howww cutee u look when uu smileeee...like i wanna climb on top of u and kissss the hell outtt of uuuu...babyyyyyy instead of reading this stupid letter come and callll meee andddd likeee talk like kore kore koreeee koreeeee talk about what made u happyyyyy...you know r8 howw much I loveee to hear those thingss.\n\nYour happy version is myyyy favvvvvv....Like...u smile differently. ..Ur eyes become all shiny✨. U talk more. (The best part)....(Nahhh not the bestt) .....u give meee kore ummaa when u are happy (yep deffo the bestestestest partttttt) ....Sometimes u start explaining random techy stuffs or games with sooo much excitement even though I barely understand half the things u say😭...but I still listen because I love hearing u talk about the things u love. ISTG it's the cutest thing ever. (Istg= i swear to god..💋)\n\nLet me go and grab my thrikkan👁 be back wait there...\n\nOkeyy letss seew...ohooooooo...OMGG (OMG=Oh my goddd☺️💕)\n\nI seee someone smiling 🫢📸 heheee got uuu (Enikk oru pic ayach tha😝...of my pottans face anddd..🙂‍↕️yk where the sun don't shineee)\n\nEnthayalum enne vilikk potheee and ramble like i dooo onnullelum ithrem naal ayille learn smth from ur diva gf 😏..\n\nI love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋I love you...💋\n\nI HOPE MYY KADHU IS ALWAYSSS HAPPYYYYY...💕🧿(Arelum kann vecha kathi kuthi kettum kannil avara njan 🥰)\n\nShoooo ividenn erangii pooo..ennitt enne vilikkkkkkkkkkkkkkkkk` },
     5: { title: "When u feel lonely..read this", text: `My dearest Kadhu...\n\nCome here ponna... enth patti bore adikkanondooo..Maybe everyone's busy including me? Maybe nothing actually happened but somehow u still feel alone.its completely normal vave. Surrounded by people sometimes...yet the heart still feels empty .If I could...I'd literally appear beside u and annoy u for absolutely no reason and then refuse to leave...and likee talk (chelakkummm) abouttt?..abouttt anything ig..lokhath kore topics ille.. athava onnullel i would ask u some techy stuffs or stock paranja enthuva and make u talk and teach me stuffs..allel better idea i would force u to teach me how to play ur fav gamee....then I'm gonna beat ur ass at ur game😏..\n\nNjan onn ente divyadristi vech onn homam cheyth nokkatteee\n\n....jeeembhooombhaaaa....Njan enthokkeyokkeyo kanunnundd....oh my godddddd!!!!!....you missssss meeeee ..sarilla ath marum enne kanan pattongi nale thanneee vann enne kaan Njan umma tharam😝💋..\n\nAnyways you are okay r8 vave👀...ok allel call me please..I hope u are.. don't think too much Abt whether to call me or not\n\neven when u say nothing u are zoning out... \n\nheadphones eduth vech korach neram paatt kettondiri and text me smth too..Njan free avumbo odi varam Njan..or better option.. say "I need u"..call me ..okeyy..the moment I see that msg Njan varam.. don't think too much what if she's doing that what if she's busy..even if I say so ennalum msg idanam..u are my precious baby r8..njan odi varam 💋💋` },
-    6: { title: "When u feel like u want peace and want to be left alone..read this", text: `My dearest Kadhu...\n\nDoes the world feel a little too hectic and loud.. it's okay to take some 'me-time'...breathee.. every human needs to take some tym for resetting there thoughts.. it's ok.can u do one thing for me. Quickly go and type.."baby I need some time alone korach kazhinj varave💕" (if u can add a kissie or lovey emoji it would be nice)- so that I won't worry unnecessarily. Allel i would keep on texting you which is not smth that should be done in this situation.. \n\ntext cheytha?..poyi cheyyada.. cheythitt bakki vayicha mathi..\n\nu don't have to reply to any other messages of mine oke. Ini keep ur phone on mute for a while enthayalum u are not in the mood to do talk or anything. Nothing would happen if ur on mute..since u already updated me I won't call or text so athum worry cheyyanda...\n\nNow just lay down on ur bed..u must be exhausted r8..vellom kudicho? \n\nTake a deep breathe. And relaxxxx..U don't have to think about anything...or if ur brain doesn't stop thinking..make it think Abt nice things..things or memories that make u happy...maybe Abt me too..if u want. Go back to where u felt safe and happy..go back to a memory that would make u smile...a memory u cherish..smile a little..korachoodi..smileee vaveée...goodd boyy..I loveee that smile of urs..u are adorable..\n\nKorach neram angane kedenno\n\nOk aya..ok ayillel takee as much tym as u need..\n\nOk ayitt u can get out from the bed onn Moham kazhukeett vaa\n\nPhone eduth nokkanonn illa ippazhe..after u are done..\n\nTake your laptop.. play any game u like..\n\nEnnitt complete calm and okey ayitt take out ur phone and do whatever u like. But don't forget to leave me a text saying I love u or I'm okay (most prob I'm gonna ask ok alle even if I didn't just send me some ummas) \n\nI love u daaa💕💋💋` },
+    6: { title: "When u feel like u want peace and want to be left alone..read this", text: `My dearest Kadhu...\n\nDoes the world feel a little too hectic and loud.. it's okay to take some 'me-time'...breathee.. every human needs to take some tym for resetting there thoughts.. it's ok.can u do one thing for me. Quickly go and type.."baby I need some time alone korach kazhinj varave💕" (if u can add a kissie or lovey emoji it would be nice)- so that I won't worry unnecessarily. Allel i would keep on texting you which is not smth that should be done in this situation.. \n\ntext cheytha?..poyi cheyyada.. cheythitt bakki vayicha mathi..\n\nu dont have to reply to any other messages of mine oke. Ini keep ur phone on mute for a while enthayalum u are not in the mood to do talk or anything. Nothing would happen if ur on mute..since u already updated me I won't call or text so athum worry cheyyanda...\n\nNow just lay down on ur bed..u must be exhausted r8..vellom kudicho? \n\nTake a deep breathe. And relaxxxx..U dont have to think about anything...or if ur brain doesn't stop thinking..make it think Abt nice things..things or memories that make u happy...maybe Abt me too..if u want. Go back to where u felt safe and happy..go back to a memory that would make u smile...a memory u cherish..smile a little..korachoodi..smileee vaveée...goodd boyy..I loveee that smile of urs..u are adorable..\n\nKorach neram angane kedenno\n\nOk aya..ok ayillel takee as much tym as u need..\n\nOk ayitt u can get out from the bed onn Moham kazhukeett vaa\n\nPhone eduth nokkanonn illa ippazhe..after u are done..\n\nTake your laptop.. play any game u like..\n\nEnnitt complete calm and okey ayitt take out ur phone and do whatever u like. But don't forget to leave me a text saying I love u or I'm okay (most prob I'm gonna ask ok alle even if I didn't just send me some ummas) \n\nI love u daaa💕💋💋` },
     7: { title: "When u feel like u want to be in my arms wrapped in a tight hug..read this", text: `My dearest Kadhu...\n\nEnth patti baby..ing vanneee..Just...come here.I know sometimes u crave a hug more than words. Sometimes there are things that can't be fixed by advice. Sometimes the heart just wants someone to hold it together for a little while. If only teleportation existed...I swear I'd be there in a heartbeat. I'd literally run to u...And when I finally reach u...I'd wrap my arms around u as tightly as I possibly can. The kind of hug where u forget about everything else for a minute...the kind that would make u exhale and relax into my arms..\n\nOru karyam cheyyam letss sit on the couch with u in my arms and just chumma irunn cuddle cheyth..let's talk about random stuffs ,laugh about stupid things, bitch Abt some idiot relatives, and gossip about what's going on in our classes..let's cuddle and think about what all we'll do once we get married . let's talk about our future..let's discuss where all we wanna sex all while snuggling into me like the baby u are 😽💋..\n\nAnd then we could both go to kitchen while u back hug me... I would quickly make some popcorn then we would go back to our couch..back to cuddling and then play any movie/series then we gonna watch it together while I feed u popcorn and hug u close. Ennitt I'll caress ur hair making u fall asleep slowly slowly..then i would turn of the tv without getting up using the remote otherwise ente vava eneekkoole..and then sleep with u...\n\n\nBtw.. call me..ik u miss me idiot 💋` },
     8: { title: "When u feel like u can't sleep and u want to..read this", text: `My dearest Kadhu...\n\nIngg baaaa..enth patti ente ponnine..vavekke orakkam varanillee. First question..Did u try calling mee? Ig u did.. otherwise adikkum Njan. I hope this is one of those days where we can't call eachother. But if u can just call me..atho ini silentil vallom ittekkana enthayalum if u can call me.. vilikk until I pick up no matter how many tyms just keep on ringing (instel alla normal callil vilikkanam ok) enthayalum since u are here ig..vilikkan pattillayirikkum..\n\nOru karyam cheyy..come here baby.. how about we try to get some sleep .\n\nStep oneee..udupp ur..if u are cold uranda. Udupp ooriya..ini ente vava blanket eduth mood..\n\nmoodikazhinja..?\n\n specs okke oori vechallo alle?\n (oh wow stupid of me r8 specs illand engana vayikkan)..ith vayich kazhinj repeat all the steps I tell u okee. \n\nSoo imagine...We are living together..and there's this cozy bed and pillows..ente ponn is really tired allee.. I'm laying on the bed already..all u gotta do is remove all the unnecessary clothes ur specs and climb in besides me.. I'll open my arms so that u could crawl into my arms and snugglee close to me..I would wrap my arms around u in a protective way so that ente ponn is safely cuddled to his ammu.\n\n Boobies pillow akki kedekkam. \n\nAnd I would gently run my fingers through your hair..caress your cheeks.. foreheadil ninn mudi okke pokki matti i would give u a peck on your forehead..while u are fully in a comfortable position. Ennitt i would gently ask u..." tired ano ente vava...hmm..kann adacho ".."thalavedhana onda ente mwuthin"..and then I would too snuggle with u..then thalodikond i would whisper like i always do..."vavo...ente ponn araa..." if u are too tired to answer I would answer it for u " neeya ente ponn..vavoo ummaa💋 ente vava orangikko...ammu ille ivide..hmm..ummaa💋 vavooo.......vavooo....ammu ente kathude aduth thanne ond...umma💋 ...engum povulla so ente vava orangikko..okey...\n\nvavooo....ente good boy alle...vavoo....\n\nravile eneekkamba ammu koree koreee koreeee umma tharavee..umma vende..orangikko..."\n\n" Vaavoooo..ammunte baby orangikko...vavoooo.....vavoooo...."` },
     9: { title: "When u feel like i don't understand u..read this", text: `My dearest Kadhu...\n\nThis one hurts a little..Because if u opened this...maybe somewhere inside u're feeling like..."Ammu doesn't get me." I'm sorry if I made u feel that way...I never wanted u to feel like that..\n\nyk me r8.. when my emotions take over i feel overwhelmed..even if u think i don't understand u I would ...give me some tym to gather my emotions..and after u too have cooled down (ik u are also sad )..talk to me after that.. otherwise this would get even more messy..talk to me make mee understand..I would listen da..just don't give up thinking she won't understand..I would ,yk how stupid my brain is..\n\nente ponnalle don't keep it to urself..if u do so how will ik what u are feeling.\n\nBaby it's important for me too to understand u ,to make u feel loved and comfortable enough to share such things. This is nottt a one way relationship..soo scold me ,talk to me ,yell at me if u want to (yellwcheyyathe scold mathrane ichikoode kollarnn..yk me i would start crying and that would again give u a headache. I'm sure u are having one r8 now..)\n\n Njan allathe pinne arod nee ithokke parayana.. I'm ur bestfriend and ur mine. Just like when I feel things ,when I feel u did something that hurt me how will u know unless I tell u..athe pole when I do smth wrong u have the right to correct me. \n\nNinakk nannayitt ariyam u have that control on me nee parayana Njan kekkarille..suppose Ippa nee ith Ennod paranjille entha ondava..I would repeat it not knowing that it made u feel this way. \n\nI hate when u don't tell me such things when u keep it to yourselfs thinking that u can handle everything alone ...ik u can but u don't have to. Njan enna al ninte lifil illarnnel ok..but ippo Njan ille.. I'm here to share ur happiness,jokes and even- Especially the sorrows.. \n\nente athra ninne ariyanum manassilakkum pattana verarund..so ente ponn oru karyam cheyyavo..if u do this " p-b " pass tharam which u can use whenever u want..\n\nsoo ente vava go to our chat..text a hi.. I'm sure I'll be there waiting for that text and when I see that I'll text u back since when we fight u don't like being disturbed (still I do that's not the point) so oru point kazhinja I'll simply be waiting for that text to come..and if u don't want to directly tell me the issue via call ...send a text like we used to..and plsss add a note saying.."(Ps..im not mad I'm just feeling down a little)"\n\n..uk the problem with chats r8..this way I'll know in what tone u have snd that msg.. otherwise I would mess it up a Lil more and it will take more tym and trust Mee i would cry my ass out and u would have to deal with a thalavedhana-ammu whose crying which will inturn give u a headache and we would fight again and I would cry again sooo...ente ponn alleee💋💋💋koreee umma tharam. I too want to understand you a little more. But for that u would have to let me in..Njan ille ninakk ..ente aduth vaa\n\nPs. Don't forget to tell me an ily tooo hehe..ANDD smileeee...I said smile i can literally see u (thrikkann👁 ond) smile..Ingane alla nere smile..pattoolenn paranja kann kuthi pottikkum ninte....smileeee....goodboyyy💋💋💋😏` },
     10: { title: "When u feel like no one's on ur side..read this", text: `My dearest Kadhu...\n\nI hope u never have to open this..for that would mean i failed; failed in making u feel safe and loved...If one day the whole world feels against u...If u feel misunderstood...If nothing goes ur way...If everyone disappoints u...If u genuinely believe there's nobody left...\n\nbaby..I'm here I'm always here for u ponne..Always. \n\nMaybe I won't always have the perfect words.Maybe I won't magically fix every problem.Maybe sometimes I'll cry with u because I don't know what else to do.\n I would never ever leave u..even after our messy Lil fights i would come running back to u once we both calm down. \n\nDa pothe Enikk nee allathe pinne ara olle. Ninakkum Njan ille ..enthokke ondayalum never think I would leave u alone to face this stupid world alone..not even if life gets messy.. especially not when u are having a bad day..I know u love me(even tho I like asking those stupid annoying "do u still love me" 's..\n\nI'm on ur team.Always.\n\nWhen u win...I'll clap the loudest.When u lose...I'll still sit beside u.When u doubt urself...I'll remind u who u are.When everyone else forgets to ask if u're okay...I'll still ask.\n\nBecause that's what loving u means.. I'll stay no matter what happen.. I'll be there even if everyone leaves u \nYou would always have me that's a guarantee i can give to u..so never ever think u have no one on ur side..coz I'm here oke... I'm ur ammu..and Nothing in this whole vast world could change it no matter the distance no matter the silence nothing..\n\nYou're still my Kadhu. The same boy I fell in love with.The same boy whose smile can fix my mood.The same boy I'd choose again...And again...And again. \n\nSo...if today u felt like nobody's standing beside u close ur eyes..and imagine ..I'm sitting besides u...if I am there I would have made u lay on my lap then I would have made u close ur eyes with a kiss..I would let u hold my hand while u lay on my lap. With the other hand i would gently run my fingers thru ur hair..and I would have scolded u saying " da pothe..enthina veruthe avishillathekke orth veshamikkane..Njan ivide ille ninakk kootin. Life full koodanikkan vendi alle nammal Ithin erangi thiriche..what makes u think ninakk aarum illa..Kannil kuru ana Njan entha manushyan alle..Njan ivide olla ninakk kandoode. Maryadhekk anganekke aloikkana nirthikkonam illel nokkikko entenn nalla adi kittum enne ariyalla..ummaaa..💋..ente ponnine ammu ille koode..chathalum ninne Njan ottekke vidoolla haunt cheyyum..ini ente ponn kann adach orangikke..ummaaa..💋..vavooo..ammunte ponn orangikko💕 (orangeele adikkum👊)"..ente baby oru karyam cheyy kann adach orang korach overwriting I can see u must be tired..kallam paranjalum adikkum..orangan pattille odi vann enne vili ammu orakki tharam..after all nee ente vava alle.` }
 };
 
-    let newLetterId = 11; 
-
-// --- READING A LETTER LOGIC ---
-function openLetter(id) {
-    const selected = letters[id];
+    // Global UI Functions
+window.openLetter = function(id) {
+    const selected = window.allLetters[id];
     if (selected) {
         document.getElementById("modal").style.display = "flex";
         document.getElementById("title").innerText = selected.title;
@@ -446,73 +462,113 @@ function openLetter(id) {
         document.getElementById("signature").innerText = "- Always Yours\nAmmu💋💋";
         document.getElementById("modalContent").scrollTop = 0;
     }
-}
+};
 
-function closeModal() {
+window.closeModal = function() {
     document.getElementById("modal").style.display = "none";
-}
+};
 
-// --- ADDING A NEW LETTER LOGIC ---
-function openAddModal() {
+window.openAddModal = function() {
     document.getElementById("addModal").style.display = "flex";
-}
+};
 
-function closeAddModal() {
+window.closeAddModal = function() {
     document.getElementById("addModal").style.display = "none";
     document.getElementById("newTitle").value = "";
     document.getElementById("newText").value = "";
-}
+};
 
-function saveNewLetter() {
+window.saveNewLetter = async function() {
     const titleVal = document.getElementById("newTitle").value;
     const textVal = document.getElementById("newText").value;
 
-    if(titleVal.trim() === "" || textVal.trim() === "") {
+    if (titleVal.trim() === "" || textVal.trim() === "") {
         alert("Please fill in both fields before submitting! ✨");
         return;
     }
 
-    // Add to localized storage array
-    letters[newLetterId] = {
-        title: titleVal,
-        text: textVal
-    };
+    try {
+        await addDoc(lettersRef, {
+            title: titleVal,
+            text: textVal,
+            timestamp: Date.now()
+        });
+        window.closeAddModal();
+    } catch(e) {
+        console.error("Error adding to Firestore: ", e);
+        alert("Oops! Had trouble saving the letter. Check console for details.");
+    }
+};
 
-    // Build card structure dynamically (Now includes the inline delete button)
-    const container = document.getElementById("cardContainer");
-    const newCard = document.createElement("div");
-    newCard.className = "card";
-    newCard.setAttribute("onclick", `openLetter(${newLetterId})`);
-    newCard.innerHTML = `<span class="card-emoji">💌</span><span class="card-text">${titleVal}</span><span class="card-delete" onclick="deleteLetter(event, ${newLetterId})">&times;</span>`;
-    
-    container.appendChild(newCard);
-    newLetterId++;
+// Dynamic Delete Function
+window.deleteLetter = async function(event, id) {
+    event.stopPropagation();
 
-    closeAddModal();
-
-    /* * ========================================================
-     * 🚀 FIREBASE SYNC PLACEHOLDER
-     * ========================================================
-     * addDoc(collection(db, "letters"), { title: titleVal, text: textVal, date: new Date() });
-     * ========================================================
-     */
-}
-
-// --- DELETING A LETTER LOGIC ---
-function deleteLetter(event, id) {
-    event.stopPropagation(); // Stops the letter from opening when 'x' is clicked
-    
-    // Popup double checking
     if (confirm("Are you sure you want to delete this letter? 💕")) {
-        delete letters[id]; // Removes from memory
-        
-        // Removes from the screen
-        const cardElement = event.target.closest('.card');
-        if (cardElement) {
-            cardElement.remove();
+        // Firebase document IDs are strings, original 10 are numbers
+        const isFirebaseDoc = typeof id === 'string';
+
+        if (isFirebaseDoc) {
+            try {
+                // Delete from DB, onSnapshot will handle UI removal
+                await deleteDoc(doc(db, "letters", id));
+            } catch(e) {
+                console.error("Error deleting doc: ", e);
+            }
+        } else {
+            // Locally delete original 10
+            delete window.allLetters[id];
+            const cardElement = event.target.closest('.card');
+            if (cardElement) {
+                cardElement.remove();
+            }
         }
     }
-}
+};
+
+// Firestore Sync Listener
+onSnapshot(lettersRef, (snapshot) => {
+    const container = document.getElementById("cardContainer");
+    
+    // Clear out previously rendered dynamic cards to avoid duplicates on refresh
+    const oldFirebaseCards = container.querySelectorAll('.firebase-card');
+    oldFirebaseCards.forEach(card => card.remove());
+
+    snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const docId = docSnap.id;
+
+        // Save into unified memory for openLetter to use
+        window.allLetters[docId] = {
+            title: data.title,
+            text: data.text
+        };
+
+        // Dynamically build card UI
+        const card = document.createElement("div");
+        card.className = "card firebase-card";
+        card.onclick = () => window.openLetter(docId);
+
+        const emojiSpan = document.createElement("span");
+        emojiSpan.className = "card-emoji";
+        emojiSpan.innerText = "💌";
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "card-text";
+        textSpan.innerText = data.title;
+
+        const deleteSpan = document.createElement("span");
+        deleteSpan.className = "card-delete";
+        deleteSpan.innerHTML = "&times;";
+        deleteSpan.onclick = (e) => window.deleteLetter(e, docId);
+
+        card.appendChild(emojiSpan);
+        card.appendChild(textSpan);
+        card.appendChild(deleteSpan);
+
+        container.appendChild(card);
+    });
+});
 </script>
 
 </body>
