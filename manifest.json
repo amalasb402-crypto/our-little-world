@@ -1,6 +1,6 @@
 {
   "name": "Our Little World",
-  "short_name": "Our World",
+  "short_name": "Our Little World",
   "start_url": "/our-little-world/",
   "display": "standalone",
   "background_color": "#7ec8ff",
